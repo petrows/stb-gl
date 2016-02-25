@@ -76,7 +76,7 @@ void Application::draw()
 	draw.draw_rectangle(0, 0, 100, 100);
 
 	stbgl_render_texture_t tex(SCREEN_W, SCREEN_H);
-	tex.draw(_test_surface_1->get_texture(), rand()%500, rand()%500, 500, 500);
+	tex.draw(_test_surface_1->get_texture(), 300, 300, 500, 500);
 
 	//Draw order
 	glutSwapBuffers();

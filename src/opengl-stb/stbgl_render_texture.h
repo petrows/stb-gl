@@ -12,6 +12,7 @@ public:
 	void draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 
 	static GLuint load_file(stbgl_surface_t *surface, const char *path);
+	static GLuint load_file_to_texture(const char *path, uint32_t &w, uint32_t &h);
 private:
 	bool prepare_shader();
 	const uint32_t _w, _h;

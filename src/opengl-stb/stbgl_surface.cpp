@@ -1,6 +1,7 @@
 #include "stbgl_surface.h"
 #include "stbgl_shader.h"
 #include "stbgl_render_draw.h"
+#include "stbgl_render_texture.h"
 
 #include "soil/SOIL.h"
 
@@ -71,17 +72,6 @@ bool stbgl_surface_t::set_current()
 
 bool stbgl_surface_t::load_image(const char *path)
 {
-	int width, height;
-	GLuint res = SOIL_load_OGL_texture
-	(
-		path,
-		&width, &height,
-		SOIL_LOAD_RGBA,
-		_texture,
-		SOIL_FLAG_POWER_OF_TWO
-	);
-
-	cout << "Load texture " << path << ", size " << width << "x" << height << endl;
-
-	return res != 0;
+	stbgl_render_texture_t::load_file(this, path);
+	return 0 != _texture;
 }

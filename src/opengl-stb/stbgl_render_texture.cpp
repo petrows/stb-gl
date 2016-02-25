@@ -38,10 +38,10 @@ void stbgl_render_texture_t::draw(GLuint texture, uint32_t x, uint32_t y, uint32
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	static const float texture_coords[] = {
-		0.0, 0.0,
-		0.0, 1.0,
-		1.0, 1.0,
 		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0,
 	};
 
 	glVertexAttribPointer(_shader_tex_pos, 2, GL_FLOAT, GL_FALSE, 0, texture_coords);
@@ -69,10 +69,29 @@ GLuint stbgl_render_texture_t::load_file(stbgl_surface_t *surface, const char *p
 		&width, &height,
 		SOIL_LOAD_RGBA,
 		surface->get_texture(),
-		SOIL_FLAG_POWER_OF_TWO
+		SOIL_FLAG_MULTIPLY_ALPHA
 	);
 
 	cout << "Load texture " << path << ", size " << width << "x" << height << endl;
+	return res;
+}
+
+GLuint stbgl_render_texture_t::load_file_to_texture(const char *path, uint32_t &w, uint32_t &h)
+{
+	int width, height;
+	GLuint res = SOIL_load_OGL_texture
+	(
+		path,
+		&width, &height,
+		SOIL_LOAD_RGBA,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MULTIPLY_ALPHA
+	);
+
+	w = width;
+	h = height;
+
+	cout << "Load texture " << path << ", size " << w << "x" << h << endl;
 
 	return res;
 }
