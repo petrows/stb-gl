@@ -30,6 +30,8 @@ bool Application::init(int argc, char **argv)
 	glutInitWindowSize(SCREEN_W, SCREEN_H);
 	glutCreateWindow("OpenGL");
 
+	_font = new stbgl_font_t("font.ttf", 20);
+
 	_test_surface_1 = new stbgl_surface_t(256, 256);
 	_test_surface_1->load_image("b.png");
 

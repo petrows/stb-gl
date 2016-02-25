@@ -10,6 +10,7 @@
 #include <GL/glut.h>
 
 #include <stbgl/stbgl_surface.h>
+#include <stbgl/stbgl_font.h>
 
 class Surface;
 
@@ -38,6 +39,7 @@ private:
 	void draw();
 
 	stbgl_surface_t * _test_surface_1;
+	stbgl_font_t * _font;
 };
 
 #endif // APPLICATION_H
