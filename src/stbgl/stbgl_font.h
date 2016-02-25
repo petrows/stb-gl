@@ -10,7 +10,7 @@ class stbgl_font_t
 public:
 	stbgl_font_t(const char *path, uint32_t size);
 
-	void draw_string(const char *utf8, );
+	void draw_string(const char *utf8, uint32_t x, uint32_t y);
 
 private:
 

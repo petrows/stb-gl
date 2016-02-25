@@ -67,16 +67,16 @@ void Application::draw()
 
 	stbgl_render_draw_t draw(SCREEN_W, SCREEN_H);
 
-	draw.set_color(stbgl_color_t(0xFFFF00FF));
+	draw.set_color(stbgl_color_t(0x888800FF));
 	draw.draw_rectangle(0, 0, SCREEN_W, SCREEN_H);
 
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-	draw.set_color(stbgl_color_t(0xFF00FFFF));
-	draw.draw_rectangle(0, 0, 100, 100);
-
 	stbgl_render_texture_t tex(SCREEN_W, SCREEN_H);
 	tex.draw(_test_surface_1->get_texture(), 300, 300, 500, 500);
+
+	draw.set_color(stbgl_color_t(0xFF00FF33));
+	draw.draw_rectangle(0, 0, 700, 700);
 
 	//Draw order
 	glutSwapBuffers();
