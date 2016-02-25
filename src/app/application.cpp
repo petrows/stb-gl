@@ -36,6 +36,8 @@ bool Application::init(int argc, char **argv)
 
 	_font = new stbgl_font_t("font.ttf", 20);
 
+	_ui_surface = new stbgl_surface_t(UI_W, UI_H);
+
 	_test_surface_1 = new stbgl_surface_t(256, 256);
 	_test_surface_1->load_image("b.png");
 
@@ -74,32 +76,28 @@ void Application::timerStatic(int te)
 
 void Application::draw()
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, SCREEN_W, SCREEN_H);
+	_ui_surface->clear(0x00000000);
+	_ui_surface->set_current();
 
-	//Background color
-	glClearColor(0, 0, 0, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	stbgl_render_draw_t draw(SCREEN_W, SCREEN_H);
-	stbgl_render_texture_t tex(SCREEN_W, SCREEN_H);
+	stbgl_render_draw_t draw(UI_W, UI_H);
+	stbgl_render_texture_t tex(UI_W, UI_H);
 
 	//draw.set_color(stbgl_color_t(0x888800FF));
 	//draw.draw_rectangle(0, 0, SCREEN_W, SCREEN_H);
 
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-	tex.draw(_bg_texture, 0, 0, SCREEN_W, SCREEN_H);
+	tex.draw(_bg_texture, 0, 0, UI_W, UI_H);
 
 	// Horz lines
 	draw.set_color(stbgl_color_t(0x66666666));
-	for (int y=0; y<SCREEN_H; y+=64)
+	for (int y=0; y<UI_H; y+=64)
 	{
-		draw.draw_rectangle(0, y, SCREEN_W, 1);
+		draw.draw_rectangle(0, y, UI_W, 1);
 	}
-	for (int x=0; x<SCREEN_W; x+=64)
+	for (int x=0; x<UI_W; x+=64)
 	{
-		draw.draw_rectangle(x, 0, 1, SCREEN_H);
+		draw.draw_rectangle(x, 0, 1, UI_H);
 	}
 
 	tex.draw(_test_surface_2->get_texture(), 150, 150, 256, 256);
@@ -114,6 +112,16 @@ void Application::draw()
 
 	draw.set_color(stbgl_color_t(0xFF00FF33));
 	draw.draw_rectangle(100, 100, 500, 500);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, SCREEN_W, SCREEN_H);
+
+	//Background color
+	glClearColor(0, 0, 0, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	stbgl_render_texture_t draw_main(SCREEN_W, SCREEN_H);
+	draw_main.draw(_ui_surface->get_texture(), 0, 0, SCREEN_W, SCREEN_H);
 
 	//Draw order
 	glutSwapBuffers();

@@ -26,8 +26,11 @@ public:
 	}
 
 public:
-	const static uint32_t SCREEN_W = 1024;
-	const static uint32_t SCREEN_H = 768;
+	const static uint32_t SCREEN_W = 1920;
+	const static uint32_t SCREEN_H = 1080;
+
+	const static uint32_t UI_W = 1280;
+	const static uint32_t UI_H = 720;
 
 	Application();
 	bool init(int argc, char **argv);
@@ -37,6 +40,8 @@ private:
 	static void drawStatic();
 	static void timerStatic(int te);
 	void draw();
+
+	stbgl_surface_t * _ui_surface;
 
 	stbgl_surface_t * _test_surface_1;
 	stbgl_surface_t * _test_surface_2;
