@@ -3,8 +3,6 @@
 #include "stbgl_render_draw.h"
 #include "stbgl_render_texture.h"
 
-#include "soil/SOIL.h"
-
 #include <iostream>
 
 using namespace std;
@@ -76,12 +74,6 @@ bool stbgl_surface_t::set_current()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
 	glViewport(0, 0, _width, _height);
-}
-
-bool stbgl_surface_t::load_image(const char *path)
-{
-	stbgl_render_texture_t::load_file(this, path);
-	return true;
 }
 
 stbgl_surface_t *stbgl_surface_t::from_image(const char *path)

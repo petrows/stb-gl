@@ -11,10 +11,12 @@ public:
 	stbgl_render_texture_t(uint32_t width, uint32_t height);
 	void draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 
-	static GLuint load_file(stbgl_surface_t *surface, const char *path);
 	static GLuint load_file_to_texture(const char *path) { uint32_t w, h; return load_file_to_texture(path, w, h); }
 	static GLuint load_file_to_texture(const char *path, uint32_t &w, uint32_t &h);
 private:
+
+	static GLuint texture_png(const char *path, uint32_t &width, uint32_t &height);
+
 	bool prepare_shader();
 	const uint32_t _w, _h;
 

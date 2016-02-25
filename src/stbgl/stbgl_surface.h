@@ -16,7 +16,6 @@ public:
 
 	GLuint get_texture() { return _texture; }
 	bool set_current(); //! Set this surface 'current' for drawing
-	bool load_image(const char *path);
 
 	uint32_t width() { return _width; }
 	uint32_t height() { return _height; }

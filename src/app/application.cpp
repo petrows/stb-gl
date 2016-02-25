@@ -9,7 +9,6 @@
 #include <string>
 #include <png.h>
 #include <GLES2/gl2.h>
-#include <SOIL/SOIL.h>
 
 using namespace std;
 
@@ -38,18 +37,17 @@ bool Application::init(int argc, char **argv)
 
 	_ui_surface = new stbgl_surface_t(UI_W, UI_H);
 
-	_test_surface_1 = new stbgl_surface_t(256, 256);
-	_test_surface_1->load_image("b.png");
+	_test_surface_1 = stbgl_surface_t::from_image("b.png");
 
-	_test_surface_2 = new stbgl_surface_t(256, 256);
+	_test_surface_2 = new stbgl_surface_t(512, 256);
 	_test_surface_2->clear(0xFF00FF33);
 	_test_surface_2->fill_rect(0x00FFFFFF, 10, 20, 40, 80);
-	_test_surface_2->blit(_test_surface_1, 0, 0);
+	_test_surface_2->blit(_test_surface_1, 0, 0, _test_surface_2->width(), _test_surface_2->height());
 	//_test_surface_2->load_image("b.png");
 
 	_test_surface_3 = stbgl_surface_t::from_image("b2.png");
 
-	_bg_texture = stbgl_render_texture_t::load_file_to_texture("bg.jpg");
+	_bg_texture = stbgl_render_texture_t::load_file_to_texture("bg.png");
 
 	return true;
 }
@@ -100,7 +98,7 @@ void Application::draw()
 		draw.draw_rectangle(x, 0, 1, UI_H);
 	}
 
-	tex.draw(_test_surface_2->get_texture(), 150, 150, 256, 256);
+	tex.draw(_test_surface_2->get_texture(), 150, 150, _test_surface_2->width(), _test_surface_2->height());
 
 	//stbgl_util_t::set_clip_rect(SCREEN_W, SCREEN_H, 100, 100, 400, 400);
 
