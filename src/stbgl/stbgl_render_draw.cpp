@@ -33,7 +33,7 @@ void stbgl_render_draw_t::draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uin
 
 	// Draw points
 	float triangleVertices[12];
-	stbgl_util::coord_rect(_w, _h, x, y, w, h, triangleVertices);
+	stbgl_util_t::coord_rect(_w, _h, x, y, w, h, triangleVertices);
 
 	const float triangleColors[] =
 	{

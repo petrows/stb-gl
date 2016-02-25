@@ -39,7 +39,11 @@ private:
 	void draw();
 
 	stbgl_surface_t * _test_surface_1;
+	stbgl_surface_t * _test_surface_2;
+	stbgl_surface_t * _test_surface_3;
 	stbgl_font_t * _font;
+
+	GLuint _bg_texture;
 };
 
 #endif // APPLICATION_H

@@ -12,10 +12,16 @@ public:
 
 	void clear(uint32_t color_rgba) { fill_rect(color_rgba, 0, 0, _width, _height); }
 	void fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
+	void blit(stbgl_surface_t *surface, uint32_t x, uint32_t y, uint32_t w = 0, uint32_t h = 0);
 
 	GLuint get_texture() { return _texture; }
 	bool set_current(); //! Set this surface 'current' for drawing
 	bool load_image(const char *path);
+
+	uint32_t width() { return _width; }
+	uint32_t height() { return _height; }
+
+	static stbgl_surface_t *from_image(const char *path);
 private:
 	const uint32_t _width, _height;
 	GLuint _framebuffer;

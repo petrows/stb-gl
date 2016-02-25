@@ -63,15 +63,43 @@ void stbgl_surface_t::fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uin
 	}
 }
 
+void stbgl_surface_t::blit(stbgl_surface_t *surface, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+{
+	if (!w) w = surface->width();
+	if (!h) h = surface->width();
+	set_current();
+	stbgl_render_texture_t tex(_width, _height);
+	tex.draw(surface->get_texture(), x, y, w, h);
+}
+
 bool stbgl_surface_t::set_current()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
-	glBindTexture(GL_TEXTURE_2D, _texture);
 	glViewport(0, 0, _width, _height);
 }
 
 bool stbgl_surface_t::load_image(const char *path)
 {
 	stbgl_render_texture_t::load_file(this, path);
-	return 0 != _texture;
+	return true;
+}
+
+stbgl_surface_t *stbgl_surface_t::from_image(const char *path)
+{
+	uint32_t w, h;
+	GLuint texture = stbgl_render_texture_t::load_file_to_texture(path, w, h);
+	if (!texture)
+	{
+		return NULL;
+	}
+
+	stbgl_surface_t *surface = new stbgl_surface_t(w, h);
+	surface->set_current();
+	glDeleteTextures(1, &surface->_texture);
+	surface->_texture = texture;
+
+	glBindTexture(GL_TEXTURE_2D, surface->_texture);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, surface->_texture, 0);
+
+	return surface;
 }
