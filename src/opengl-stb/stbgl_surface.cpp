@@ -71,13 +71,17 @@ bool stbgl_surface_t::set_current()
 
 bool stbgl_surface_t::load_image(const char *path)
 {
+	int width, height;
 	GLuint res = SOIL_load_OGL_texture
 	(
 		path,
+		&width, &height,
 		SOIL_LOAD_RGBA,
 		_texture,
 		SOIL_FLAG_POWER_OF_TWO
 	);
+
+	cout << "Load texture " << path << ", size " << width << "x" << height << endl;
 
 	return res != 0;
 }

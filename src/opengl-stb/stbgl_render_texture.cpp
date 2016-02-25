@@ -61,13 +61,18 @@ void stbgl_render_texture_t::draw(GLuint texture, uint32_t x, uint32_t y, uint32
 
 GLuint stbgl_render_texture_t::load_file(stbgl_surface_t *surface, const char *path)
 {
+	int width, height;
+
 	GLuint res = SOIL_load_OGL_texture
 	(
 		path,
+		&width, &height,
 		SOIL_LOAD_RGBA,
 		surface->get_texture(),
 		SOIL_FLAG_POWER_OF_TWO
 	);
+
+	cout << "Load texture " << path << ", size " << width << "x" << height << endl;
 
 	return res;
 }
