@@ -1,5 +1,6 @@
 #include "application.h"
 
+#include <opengl-stb/stbgl_render_draw.h>
 #include <opengl-stb/stbgl_shader.h>
 #include <opengl-stb/stbgl_surface.h>
 
@@ -57,8 +58,12 @@ void Application::draw()
 	glViewport(0, 0, SCREEN_W, SCREEN_H);
 
 	//Background color
-	glClearColor(0, 0, 0, 1);
+	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	stbgl_render_draw_t draw(SCREEN_W, SCREEN_H);
+	draw.set_color(stbgl_color_t(0xFF00FFFF));
+	draw.draw_rectangle(0, 0, 100, 100);
 
 	//Draw order
 	glutSwapBuffers();

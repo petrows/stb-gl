@@ -31,22 +31,27 @@ stbgl_surface_t::~stbgl_surface_t()
 
 }
 
-void stbgl_surface_t::fillRect(uint32_t colorRGBA, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+void stbgl_surface_t::fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	glEnable(GL_BLEND);
-	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+
+	set_current();
 
 	stbgl_render_draw_t render(_width, _height);
-	render.setBlendFlags(GL_ONE, GL_ZERO);
-	render.setColor(colorRGBA);
-	render.drawRectangle(x, y, w, h);
-
-	cout << "Draw rectangle on " << _texture << endl;
+	render.set_color(color_rgba);
+	render.draw_rectangle(x, y, w, h);
 
 	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		cerr << "Framebuffer errir!!!" << endl;
 	}
+}
+
+bool stbgl_surface_t::set_current()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+	glBindTexture(GL_TEXTURE_2D, _texture);
+	glViewport(0, 0, _width, _height);
 }
 
 void stbgl_surface_t::bindTexture()

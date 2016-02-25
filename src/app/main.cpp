@@ -1,3 +1,5 @@
+#include "application.h"
+
 #include <stdlib.h>
 #include <time.h>
 
@@ -5,5 +7,9 @@
 int main(int argc, char **argv)
 {
 	srand(time(NULL));
-	return 1;
+	if (!Application::getInstance()->init(argc, argv))
+		return 1;
+
+	Application::getInstance()->run();
+	return 0;
 }

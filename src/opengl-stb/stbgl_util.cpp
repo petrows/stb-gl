@@ -13,18 +13,18 @@ float stbgl_util::coord_y(uint32_t h, uint32_t y)
 void stbgl_util::coord_rect(uint32_t screen_w, uint32_t screen_h, uint32_t x, uint32_t y, uint32_t w, uint32_t h, float *vect)
 {
 	vect[0] = coord_x(screen_w, x+w);
-	vect[1] = coord_x(screen_h, y);
+	vect[1] = coord_y(screen_h, y);
 	vect[2] = 0.0;
 
 	vect[3] = coord_x(screen_w, x+w);
-	vect[4] = coord_x(screen_h, y+h);
+	vect[4] = coord_y(screen_h, y+h);
 	vect[5] = 0.0;
 
 	vect[6] = coord_x(screen_w, x);
-	vect[7] = coord_x(screen_h, y+h);
+	vect[7] = coord_y(screen_h, y+h);
 	vect[8] = 0.0;
 
 	vect[9] = coord_x(screen_w, x);
-	vect[10] = coord_x(screen_h, y);
+	vect[10] = coord_y(screen_h, y);
 	vect[11] = 0.0;
 }

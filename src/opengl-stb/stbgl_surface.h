@@ -10,11 +10,11 @@ private:
 	stbgl_surface_t(int w, int h);
 	~stbgl_surface_t();
 
-	void clear(uint32_t colorRGBA) { fillRect(colorRGBA, 0, 0, _width, _height); }
-	void fillRect(uint32_t colorRGBA, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
+	void clear(uint32_t color_rgba) { fill_rect(color_rgba, 0, 0, _width, _height); }
+	void fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 
-	GLuint getTexture() { return _texture; }
-
+	GLuint get_texture() { return _texture; }
+	bool set_current(); //! Set this surface 'current' for drawing
 private:
 
 	void bindTexture();

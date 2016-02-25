@@ -12,44 +12,20 @@ GLint  stbgl_render_draw_t::_shaderAttrColor = 0;
 
 stbgl_render_draw_t::stbgl_render_draw_t(uint32_t width, uint32_t height)
 	: _w(width), _h(height)
-	, _r(0.0f), _g(0.0f), _b(0.0f), _a(1)
 {
 	if (0 == _shaderProgram)
 	{
-		prepareSaderSolid();
+		prepare_shader();
 	}
-	setBlendFlags();
 }
 
-void stbgl_render_draw_t::setBlendFlags(int color, int alpha)
+void stbgl_render_draw_t::clear(const stbgl_color_t &color)
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(color, alpha);
+	set_color(color);
+	draw_rectangle(0, 0, _w, _h);
 }
 
-void stbgl_render_draw_t::setColor(float r, float g, float b, float a)
-{
-	 _r = r; _g = g; _b = b; _a = a;
-	 cout << "New color: " << r << "," << g << "," << b << "," << a << endl;
-}
-
-void stbgl_render_draw_t::setColor(uint32_t rgba)
-{
-	float a = (uint8_t) (rgba & 0xff);
-	float b = (uint8_t) ((rgba & 0xff00) >> 8);
-	float g = (uint8_t) ((rgba & 0xff0000) >> 16);
-	float r = (uint8_t) ((rgba & 0xff000000) >> 24);
-
-	setColor(r/255.0f, g/255.0f, b/255.0f, a/255.0f);
-}
-
-void stbgl_render_draw_t::clear(uint32_t rgba)
-{
-	setColor(rgba);
-	drawRectangle(0, 0, _w, _h);
-}
-
-void stbgl_render_draw_t::drawRectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+void stbgl_render_draw_t::draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	glEnable(GL_BLEND);
 	glUseProgram(_shaderProgram);
@@ -61,10 +37,10 @@ void stbgl_render_draw_t::drawRectangle(uint32_t x, uint32_t y, uint32_t w, uint
 
 	const float triangleColors[] =
 	{
-		_r, _g, _b, _a,
-		_r, _g, _b, _a,
-		_r, _g, _b, _a,
-		_r, _g, _b, _a,
+		_color.r(), _color.g(), _color.b(), _color.a(),
+		_color.r(), _color.g(), _color.b(), _color.a(),
+		_color.r(), _color.g(), _color.b(), _color.a(),
+		_color.r(), _color.g(), _color.b(), _color.a(),
 	};
 
 	glEnableVertexAttribArray(0);
@@ -78,7 +54,7 @@ void stbgl_render_draw_t::drawRectangle(uint32_t x, uint32_t y, uint32_t w, uint
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-void stbgl_render_draw_t::prepareSaderSolid()
+void stbgl_render_draw_t::prepare_shader()
 {
 	_shaderProgram = glCreateProgram();
 

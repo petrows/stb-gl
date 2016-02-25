@@ -4,24 +4,20 @@
 #include <stdint.h>
 #include <GLES2/gl2.h>
 
+#include "stbgl_color.h"
+
 class stbgl_render_draw_t
 {
 public:
 	stbgl_render_draw_t(uint32_t width, uint32_t height);
-	void setBlendFlags(int color = GL_ONE, int alpha = GL_SRC_ALPHA);
-	void setColor(float r, float g, float b, float a);
-	void setColor(uint32_t rgba);
-	void clear(uint32_t rgba);
-	void drawRectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 
-	float r() { return _r; }
-	float g() { return _g; }
-	float b() { return _b; }
-	float a() { return _a; }
+	void clear(const stbgl_color_t &color);
+	void set_color(const stbgl_color_t &color) { _color = color; }
+	void draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 private:
-	void prepareSaderSolid();
+	void prepare_shader();
 	const uint32_t _w, _h;
-	float _r, _g, _b, _a;
+	stbgl_color_t _color;
 
 	GLuint _shaderSolidFragment;
 	GLuint _shaderSolidVertex;
