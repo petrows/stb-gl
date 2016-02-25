@@ -53,7 +53,7 @@ void Application::drawStatic()
 void Application::timerStatic(int te)
 {
 	glutPostRedisplay(); // Redraw screen with new object data.
-	glutTimerFunc(100, &Application::timerStatic, 1);
+	glutTimerFunc(10, &Application::timerStatic, 1);
 }
 
 void Application::draw()
@@ -76,7 +76,7 @@ void Application::draw()
 	draw.draw_rectangle(0, 0, 100, 100);
 
 	stbgl_render_texture_t tex(SCREEN_W, SCREEN_H);
-	tex.draw(_test_surface_1->get_texture(), 200, 200, 500, 500);
+	tex.draw(_test_surface_1->get_texture(), rand()%500, rand()%500, 500, 500);
 
 	//Draw order
 	glutSwapBuffers();
