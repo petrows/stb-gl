@@ -15,16 +15,16 @@ public:
 	void set_color(const stbgl_color_t &color) { _color = color; }
 	void draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 private:
-	void prepare_shader();
+	bool prepare_shader();
 	const uint32_t _w, _h;
 	stbgl_color_t _color;
 
-	GLuint _shaderSolidFragment;
-	GLuint _shaderSolidVertex;
+	GLuint _shader_fragment;
+	GLuint _shader_vertex;
 
-	static GLuint	_shaderProgram;
-	static GLint	_shaderAttrPos; //Quad vertex positions
-	static GLint	_shaderAttrColor; //Vertex fill color
+	static GLuint	_shader_program;
+	static GLint	_shader_attr_pos; //Quad vertex positions
+	static GLint	_shader_attr_color; //Vertex fill color
 };
 
 #endif // STBGL_RENDER_DRAW_H

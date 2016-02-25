@@ -6,8 +6,8 @@
 
 class stbgl_surface_t
 {
-private:
-	stbgl_surface_t(int w, int h);
+public:
+	stbgl_surface_t(uint32_t w, uint32_t h);
 	~stbgl_surface_t();
 
 	void clear(uint32_t color_rgba) { fill_rect(color_rgba, 0, 0, _width, _height); }
@@ -15,10 +15,8 @@ private:
 
 	GLuint get_texture() { return _texture; }
 	bool set_current(); //! Set this surface 'current' for drawing
+	bool load_image(const char *path);
 private:
-
-	void bindTexture();
-
 	const uint32_t _width, _height;
 	GLuint _framebuffer;
 	GLuint _texture;

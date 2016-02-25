@@ -6,14 +6,14 @@
 
 using namespace std;
 
-GLuint stbgl_render_draw_t::_shaderProgram = 0;
-GLint  stbgl_render_draw_t::_shaderAttrPos = 0;
-GLint  stbgl_render_draw_t::_shaderAttrColor = 0;
+GLuint stbgl_render_draw_t::_shader_program = 0;
+GLint  stbgl_render_draw_t::_shader_attr_pos = 0;
+GLint  stbgl_render_draw_t::_shader_attr_color = 0;
 
 stbgl_render_draw_t::stbgl_render_draw_t(uint32_t width, uint32_t height)
 	: _w(width), _h(height)
 {
-	if (0 == _shaderProgram)
+	if (0 == _shader_program)
 	{
 		prepare_shader();
 	}
@@ -28,7 +28,7 @@ void stbgl_render_draw_t::clear(const stbgl_color_t &color)
 void stbgl_render_draw_t::draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	glEnable(GL_BLEND);
-	glUseProgram(_shaderProgram);
+	glUseProgram(_shader_program);
 	glViewport(0, 0, _w, _h);
 
 	// Draw points
@@ -45,43 +45,44 @@ void stbgl_render_draw_t::draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uin
 
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(_shaderAttrPos, 3, GL_FLOAT, GL_FALSE, 0, triangleVertices);
-	glEnableVertexAttribArray(_shaderAttrPos);
+	glVertexAttribPointer(_shader_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, triangleVertices);
+	glEnableVertexAttribArray(_shader_attr_pos);
 
-	glVertexAttribPointer(_shaderAttrColor, 4, GL_FLOAT, GL_FALSE, 0, triangleColors);
-	glEnableVertexAttribArray(_shaderAttrColor);
+	glVertexAttribPointer(_shader_attr_color, 4, GL_FLOAT, GL_FALSE, 0, triangleColors);
+	glEnableVertexAttribArray(_shader_attr_color);
 
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-void stbgl_render_draw_t::prepare_shader()
+bool stbgl_render_draw_t::prepare_shader()
 {
-	_shaderProgram = glCreateProgram();
+	_shader_program = glCreateProgram();
 
-	_shaderSolidFragment = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_solid_frag(), GL_FRAGMENT_SHADER);
-	_shaderSolidVertex   = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_solid_vert(), GL_VERTEX_SHADER);
+	_shader_fragment = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_solid_frag(), GL_FRAGMENT_SHADER);
+	_shader_vertex   = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_solid_vert(), GL_VERTEX_SHADER);
 
-	glAttachShader(_shaderProgram, _shaderSolidFragment);
-	glAttachShader(_shaderProgram, _shaderSolidVertex);
-	glLinkProgram(_shaderProgram);
+	glAttachShader(_shader_program, _shader_fragment);
+	glAttachShader(_shader_program, _shader_vertex);
+	glLinkProgram(_shader_program);
 
-	if (0 == _shaderProgram)
+	if (0 == _shader_program)
 	{
 		cerr << "Error create shader program! Error " << glGetError() << endl;
-		return;
+		return false;
 	}
 
-	_shaderAttrPos = glGetAttribLocation(_shaderProgram, "a_v4Position");
-	if (0 > _shaderAttrPos)
+	_shader_attr_pos = glGetAttribLocation(_shader_program, "a_v4Position");
+	if (0 > _shader_attr_pos)
 	{
 		cerr << "Shader pos error!" << endl;
-		return;
+		return false;
 	}
-	_shaderAttrColor = glGetAttribLocation(_shaderProgram, "a_v4FillColor");
-	if (0 > _shaderAttrColor)
+	_shader_attr_color = glGetAttribLocation(_shader_program, "a_v4FillColor");
+	if (0 > _shader_attr_color)
 	{
 		cerr << "Shader color error!" << endl;
-		return;
+		return false;
 	}
 	cout << "Prepared sold draw program" << endl;
+	return true;
 }
