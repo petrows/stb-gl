@@ -77,8 +77,8 @@ bool stbgl_render_texture_t::prepare_shader()
 	_shader_program = glCreateProgram();
 
 	// Load shaders
-	_shader_fragment = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_solid_frag(), GL_FRAGMENT_SHADER);
-	_shader_vertex   = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_solid_vert(), GL_VERTEX_SHADER);
+	_shader_fragment = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_texture_frag(), GL_FRAGMENT_SHADER);
+	_shader_vertex   = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_texture_vert(), GL_VERTEX_SHADER);
 
 	glAttachShader(_shader_program, _shader_fragment);
 	glAttachShader(_shader_program, _shader_vertex);

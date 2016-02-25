@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <GL/glut.h>
 
+#include <opengl-stb/stbgl_surface.h>
+
 class Surface;
 
 class Application
@@ -34,6 +36,8 @@ private:
 	static void drawStatic();
 	static void timerStatic(int te);
 	void draw();
+
+	stbgl_surface_t * _test_surface_1;
 };
 
 #endif // APPLICATION_H
