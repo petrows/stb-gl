@@ -1,9 +1,9 @@
 #include "application.h"
 
-#include <opengl-stb/stbgl_render_draw.h>
-#include <opengl-stb/stbgl_render_texture.h>
-#include <opengl-stb/stbgl_shader.h>
-#include <opengl-stb/stbgl_surface.h>
+#include <stbgl/stbgl_render_draw.h>
+#include <stbgl/stbgl_render_texture.h>
+#include <stbgl/stbgl_shader.h>
+#include <stbgl/stbgl_surface.h>
 
 #include <string>
 #include <png.h>

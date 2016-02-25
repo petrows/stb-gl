@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <GL/glut.h>
 
-#include <opengl-stb/stbgl_surface.h>
+#include <stbgl/stbgl_surface.h>
 
 class Surface;
 
