@@ -1,11 +1,13 @@
-#include "stbgl_color.h"
+#include "color.h"
 
-void stbgl_color_t::set_color(float r, float g, float b, float a)
+using namespace stbgl;
+
+void color_t::set_color(float r, float g, float b, float a)
 {
 	_r = r; _g = g; _b = b; _a = a;
 }
 
-void stbgl_color_t::set_color(uint32_t rgba)
+void color_t::set_color(uint32_t rgba)
 {
 	float a = (uint8_t) (rgba & 0xff);
 	float b = (uint8_t) ((rgba & 0xff00) >> 8);

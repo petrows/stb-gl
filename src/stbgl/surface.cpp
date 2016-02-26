@@ -1,14 +1,18 @@
-#include "stbgl_surface.h"
-#include "stbgl_shader.h"
-#include "stbgl_render_draw.h"
-#include "stbgl_render_texture.h"
+#include "exception.h"
+#include "surface.h"
+#include "shader.h"
+#include "drawing.h"
+#include "texture.h"
 
 #include <iostream>
 
 using namespace std;
+using namespace stbgl;
 
-stbgl_surface_t::stbgl_surface_t(uint32_t w, uint32_t h)
-	: _width(w)
+surface_t::surface_t(uint32_t w, uint32_t h, GLuint texture)
+	: _texture(texture)
+	, _framebuffer(0)
+	, _width(w)
 	, _height(h)
 {
 	glGenFramebuffers(1, &_framebuffer);
@@ -33,25 +37,41 @@ stbgl_surface_t::stbgl_surface_t(uint32_t w, uint32_t h)
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0, 0, 0, 0);
 
-	cout << "New surface, " << _width << "x" << _height << ", fb " << _framebuffer << ", tex " << _texture << endl;
-
 	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
-		cerr << "Framebuffer errir!!!" << endl;
+		// std::stringstream ss; ss << "Wrong status: " << glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		// throw framebuffer_error_t(ss.str().c_str());
 	}
 }
 
-stbgl_surface_t::~stbgl_surface_t()
+surface_t::~surface_t()
 {
 	glDeleteTextures(1, &_texture);
 	glDeleteFramebuffers(1, &_framebuffer);
 }
 
-void stbgl_surface_t::fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+surface_ptr_t surface_t::create(uint32_t w, uint32_t h)
+{
+	return std::make_shared<surface_t>(w, h, 0);
+}
+
+surface_ptr_t surface_t::create(uint32_t w, uint32_t h, GLuint texture)
+{
+	return std::make_shared<surface_t>(w, h, texture);
+}
+
+surface_ptr_t surface_t::create_from_image(const char *path)
+{
+	uint32_t w, h;
+	GLuint texture = texture_t::load_file_to_texture(path, w, h);
+	return create(w, h, texture);
+}
+
+void surface_t::fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	set_current();
 
-	stbgl_render_draw_t render(_width, _height);
+	drawing_t render(_width, _height);
 	render.set_color(color_rgba);
 	render.draw_rectangle(x, y, w, h);
 
@@ -61,37 +81,17 @@ void stbgl_surface_t::fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uin
 	}
 }
 
-void stbgl_surface_t::blit(stbgl_surface_t *surface, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+void surface_t::blit(surface_ptr_t &surface, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	if (!w) w = surface->width();
 	if (!h) h = surface->width();
 	set_current();
-	stbgl_render_texture_t tex(_width, _height);
+	texture_t tex(_width, _height);
 	tex.draw(surface->get_texture(), x, y, w, h);
 }
 
-bool stbgl_surface_t::set_current()
+bool surface_t::set_current()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
 	glViewport(0, 0, _width, _height);
-}
-
-stbgl_surface_t *stbgl_surface_t::from_image(const char *path)
-{
-	uint32_t w, h;
-	GLuint texture = stbgl_render_texture_t::load_file_to_texture(path, w, h);
-	if (!texture)
-	{
-		return NULL;
-	}
-
-	stbgl_surface_t *surface = new stbgl_surface_t(w, h);
-	surface->set_current();
-	glDeleteTextures(1, &surface->_texture);
-	surface->_texture = texture;
-
-	glBindTexture(GL_TEXTURE_2D, surface->_texture);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, surface->_texture, 0);
-
-	return surface;
 }

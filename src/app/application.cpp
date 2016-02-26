@@ -1,27 +1,22 @@
 #include "application.h"
 
-#include <stbgl/stbgl_util.h>
-#include <stbgl/stbgl_render_draw.h>
-#include <stbgl/stbgl_render_texture.h>
-#include <stbgl/stbgl_shader.h>
-#include <stbgl/stbgl_surface.h>
-
 #include <string>
-#include <png.h>
 #include <GLES2/gl2.h>
 
 using namespace std;
+using namespace stbgl;
 
 Application *Application::_instance = NULL;
 
 Application::Application()
 {
-
+cout << "Init..." << endl;
 }
 
 bool Application::init(int argc, char **argv)
 {
 
+	cout << "Init..." << endl;
 	glutInit(&argc, argv);
 
 	//Simple buffer
@@ -30,24 +25,23 @@ bool Application::init(int argc, char **argv)
 	glutInitWindowSize(SCREEN_W, SCREEN_H);
 	glutCreateWindow("OpenGL");
 
-
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-	_font = new stbgl_font_t("font.ttf", 20);
+	_font = new font_t("font.ttf", 20);
 
-	_ui_surface = new stbgl_surface_t(UI_W, UI_H);
+	_ui_surface = surface_t::create(UI_W, UI_H);
 
-	_test_surface_1 = stbgl_surface_t::from_image("b.png");
+	_test_surface_1 = surface_t::create_from_image("b.png");
 
-	_test_surface_2 = new stbgl_surface_t(512, 256);
+	_test_surface_2 = surface_t::create(512, 256);
 	_test_surface_2->clear(0xFF00FF33);
 	_test_surface_2->fill_rect(0x00FFFFFF, 10, 20, 40, 80);
 	_test_surface_2->blit(_test_surface_1, 0, 0, _test_surface_2->width(), _test_surface_2->height());
 	//_test_surface_2->load_image("b.png");
 
-	_test_surface_3 = stbgl_surface_t::from_image("b2.png");
+	_test_surface_3 = surface_t::create_from_image("b2.png");
 
-	_bg_texture = stbgl_render_texture_t::load_file_to_texture("bg.png");
+	_bg_texture = texture_t::load_file_to_texture("bg.png");
 
 	return true;
 }
@@ -77,10 +71,10 @@ void Application::draw()
 	_ui_surface->clear(0x00000000);
 	_ui_surface->set_current();
 
-	stbgl_render_draw_t draw(UI_W, UI_H);
-	stbgl_render_texture_t tex(UI_W, UI_H);
+	drawing_t draw(UI_W, UI_H);
+	texture_t tex(UI_W, UI_H);
 
-	//draw.set_color(stbgl_color_t(0x888800FF));
+	//draw.set_color(color_t(0x888800FF));
 	//draw.draw_rectangle(0, 0, SCREEN_W, SCREEN_H);
 
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
@@ -88,7 +82,7 @@ void Application::draw()
 	tex.draw(_bg_texture, 0, 0, UI_W, UI_H);
 
 	// Horz lines
-	draw.set_color(stbgl_color_t(0x66666666));
+	draw.set_color(color_t(0x66666666));
 	for (int y=0; y<UI_H; y+=64)
 	{
 		draw.draw_rectangle(0, y, UI_W, 1);
@@ -100,15 +94,15 @@ void Application::draw()
 
 	tex.draw(_test_surface_2->get_texture(), 150, 150, _test_surface_2->width(), _test_surface_2->height());
 
-	//stbgl_util_t::set_clip_rect(SCREEN_W, SCREEN_H, 100, 100, 400, 400);
+	//util_t::set_clip_rect(SCREEN_W, SCREEN_H, 100, 100, 400, 400);
 
 	tex.draw(_test_surface_1->get_texture(), 300, 300, 500, 500);
 
 
 	tex.draw(_test_surface_3->get_texture(), 768, 200, _test_surface_3->width(), _test_surface_3->height());
-	//stbgl_util_t::reset_clip_rect();
+	//util_t::reset_clip_rect();
 
-	draw.set_color(stbgl_color_t(0xFF00FF33));
+	draw.set_color(color_t(0xFF00FF33));
 	draw.draw_rectangle(100, 100, 500, 500);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -118,7 +112,7 @@ void Application::draw()
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	stbgl_render_texture_t draw_main(SCREEN_W, SCREEN_H);
+	texture_t draw_main(SCREEN_W, SCREEN_H);
 	draw_main.draw(_ui_surface->get_texture(), 0, 0, SCREEN_W, SCREEN_H);
 
 	//Draw order

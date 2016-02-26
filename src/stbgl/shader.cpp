@@ -1,9 +1,10 @@
-#include "stbgl_shader.h"
-
+#include "shader.h"
 #include <iostream>
-using namespace std;
 
-GLuint stbgl_shader_t::load_shader_data(const char *data, int type)
+using namespace std;
+using namespace stbgl;
+
+GLuint shader_t::load_shader_data(const char *data, int type)
 {
 	GLuint shader = glCreateShader(type);
 	GLint compiled = 0;
@@ -29,12 +30,12 @@ GLuint stbgl_shader_t::load_shader_data(const char *data, int type)
 	return shader;
 }
 
-GLuint stbgl_shader_t::load_shader_file(const char *filename, int type)
+GLuint shader_t::load_shader_file(const char *filename, int type)
 {
 
 }
 
-const char *stbgl_shader_t::get_solid_frag()
+const char *shader_t::get_solid_frag()
 {
 	return " \
 	varying vec4 v_v4FillColor;			\
@@ -43,7 +44,7 @@ const char *stbgl_shader_t::get_solid_frag()
 	}";
 }
 
-const char *stbgl_shader_t::get_solid_vert()
+const char *shader_t::get_solid_vert()
 {
 	return " \
 	attribute vec4 a_v4Position;		\
@@ -55,7 +56,7 @@ const char *stbgl_shader_t::get_solid_vert()
 	}";
 }
 
-const char *stbgl_shader_t::get_texture_frag()
+const char *shader_t::get_texture_frag()
 {
 	return " \
 	#ifndef GLES2						\n\
@@ -70,7 +71,7 @@ const char *stbgl_shader_t::get_texture_frag()
 	}";
 }
 
-const char *stbgl_shader_t::get_texture_vert()
+const char *shader_t::get_texture_vert()
 {
 	return " \
 	attribute vec4 a_v4Position;		\

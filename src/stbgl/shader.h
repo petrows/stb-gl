@@ -1,12 +1,14 @@
 #ifndef STBGL_SHADER_H
 #define STBGL_SHADER_H
 
-#include <GLES2/gl2.h>
+#include "global.h"
 
-class stbgl_shader_t
+namespace stbgl {
+
+class shader_t
 {
 private:
-	stbgl_shader_t() {}
+	shader_t() {}
 public:
 	static GLuint load_shader_data(const char *data, int type);
 	static GLuint load_shader_file(const char *filename, int type);
@@ -16,5 +18,7 @@ public:
 	static const char * get_texture_frag();
 	static const char * get_texture_vert();
 };
+
+}
 
 #endif // STBGL_SHADER_H

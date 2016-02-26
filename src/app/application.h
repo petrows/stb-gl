@@ -1,6 +1,8 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include <stbgl/stbgl.h>
+
 #include <list>
 #include <iostream>
 #include <string>
@@ -9,10 +11,7 @@
 #include <stdio.h>
 #include <GL/glut.h>
 
-#include <stbgl/stbgl_surface.h>
-#include <stbgl/stbgl_font.h>
 
-class Surface;
 
 class Application
 {
@@ -41,12 +40,13 @@ private:
 	static void timerStatic(int te);
 	void draw();
 
-	stbgl_surface_t * _ui_surface;
 
-	stbgl_surface_t * _test_surface_1;
-	stbgl_surface_t * _test_surface_2;
-	stbgl_surface_t * _test_surface_3;
-	stbgl_font_t * _font;
+	stbgl::surface_ptr_t _ui_surface;
+
+	stbgl::surface_ptr_t _test_surface_1;
+	stbgl::surface_ptr_t _test_surface_2;
+	stbgl::surface_ptr_t _test_surface_3;
+	stbgl::font_t * _font;
 
 	GLuint _bg_texture;
 };

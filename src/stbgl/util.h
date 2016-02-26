@@ -1,10 +1,11 @@
 #ifndef STBGL_UTIL_H
 #define STBGL_UTIL_H
 
-#include <stdint.h>
-#include <GLES2/gl2.h>
+#include "global.h"
 
-class stbgl_util_t
+namespace stbgl {
+
+class util_t
 {
 public:
 	/** Coordinates in PX from TOP-LEFT */
@@ -15,5 +16,7 @@ public:
 	static void set_clip_rect(uint32_t screen_w, uint32_t screen_h, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 	static void reset_clip_rect();
 };
+
+}
 
 #endif // STBGL_UTIL_H

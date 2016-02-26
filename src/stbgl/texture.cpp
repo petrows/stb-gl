@@ -1,19 +1,20 @@
-#include "stbgl_render_texture.h"
-#include "stbgl_shader.h"
-#include "stbgl_util.h"
+#include "texture.h"
+#include "shader.h"
+#include "util.h"
 
 #include <png.h>
 
 #include <iostream>
 
 using namespace std;
+using namespace stbgl;
 
-GLuint stbgl_render_texture_t::_shader_program = 0;
-GLint  stbgl_render_texture_t::_shader_attr_pos = 0;
-GLint  stbgl_render_texture_t::_shader_tex_uniform = 0;
-GLint  stbgl_render_texture_t::_shader_tex_pos = 0;
+GLuint texture_t::_shader_program = 0;
+GLint  texture_t::_shader_attr_pos = 0;
+GLint  texture_t::_shader_tex_uniform = 0;
+GLint  texture_t::_shader_tex_pos = 0;
 
-stbgl_render_texture_t::stbgl_render_texture_t(uint32_t width, uint32_t height)
+texture_t::texture_t(uint32_t width, uint32_t height)
 	: _w(width), _h(height)
 {
 	if (0 == _shader_program)
@@ -22,7 +23,7 @@ stbgl_render_texture_t::stbgl_render_texture_t(uint32_t width, uint32_t height)
 	}
 }
 
-void stbgl_render_texture_t::draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+void texture_t::draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	glEnable(GL_BLEND);
 	glUseProgram(_shader_program);
@@ -48,7 +49,7 @@ void stbgl_render_texture_t::draw(GLuint texture, uint32_t x, uint32_t y, uint32
 
 	// Draw surfaces
 	float triangleVertices[12];
-	stbgl_util_t::coord_rect(_w, _h, x, y, w, h, triangleVertices);
+	util_t::coord_rect(_w, _h, x, y, w, h, triangleVertices);
 
 	glEnableVertexAttribArray(0);
 
@@ -58,7 +59,7 @@ void stbgl_render_texture_t::draw(GLuint texture, uint32_t x, uint32_t y, uint32
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-GLuint stbgl_render_texture_t::load_file_to_texture(const char *path, uint32_t &w, uint32_t &h)
+GLuint texture_t::load_file_to_texture(const char *path, uint32_t &w, uint32_t &h)
 {
 	int width, height;
 	GLuint res = texture_png(path, w, h);
@@ -73,7 +74,7 @@ GLuint stbgl_render_texture_t::load_file_to_texture(const char *path, uint32_t &
 	return res;
 }
 
-GLuint stbgl_render_texture_t::texture_png(const char *path, uint32_t &width, uint32_t &height)
+GLuint texture_t::texture_png(const char *path, uint32_t &width, uint32_t &height)
 {
 	png_byte header[8];
 
@@ -196,13 +197,13 @@ GLuint stbgl_render_texture_t::texture_png(const char *path, uint32_t &width, ui
 	return texture;
 }
 
-bool stbgl_render_texture_t::prepare_shader()
+bool texture_t::prepare_shader()
 {
 	_shader_program = glCreateProgram();
 
 	// Load shaders
-	_shader_fragment = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_texture_frag(), GL_FRAGMENT_SHADER);
-	_shader_vertex   = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_texture_vert(), GL_VERTEX_SHADER);
+	_shader_fragment = shader_t::load_shader_data(shader_t::get_texture_frag(), GL_FRAGMENT_SHADER);
+	_shader_vertex   = shader_t::load_shader_data(shader_t::get_texture_vert(), GL_VERTEX_SHADER);
 
 	glAttachShader(_shader_program, _shader_fragment);
 	glAttachShader(_shader_program, _shader_vertex);

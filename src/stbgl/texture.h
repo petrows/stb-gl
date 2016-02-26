@@ -1,14 +1,16 @@
 #ifndef STBGL_RENDER_TEXTURE_T_H
 #define STBGL_RENDER_TEXTURE_T_H
 
-#include "stbgl_surface.h"
+#include "global.h"
+#include "surface.h"
 
-#include <GLES2/gl2.h>
+namespace stbgl {
 
-class stbgl_render_texture_t
+class texture_t
 {
 public:
-	stbgl_render_texture_t(uint32_t width, uint32_t height);
+	texture_t(uint32_t width, uint32_t height);
+
 	void draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 
 	static GLuint load_file_to_texture(const char *path) { uint32_t w, h; return load_file_to_texture(path, w, h); }
@@ -28,5 +30,7 @@ private:
 	static GLint	_shader_tex_uniform;
 	static GLint	_shader_tex_pos; //Vertex fill color
 };
+
+}
 
 #endif // STBGL_RENDER_TEXTURE_T_H

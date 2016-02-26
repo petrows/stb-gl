@@ -1,16 +1,17 @@
-#include "stbgl_render_draw.h"
-#include "stbgl_shader.h"
-#include "stbgl_util.h"
+#include "drawing.h"
+#include "shader.h"
+#include "util.h"
 
 #include <iostream>
 
 using namespace std;
+using namespace stbgl;
 
-GLuint stbgl_render_draw_t::_shader_program = 0;
-GLint  stbgl_render_draw_t::_shader_attr_pos = 0;
-GLint  stbgl_render_draw_t::_shader_attr_color = 0;
+GLuint drawing_t::_shader_program = 0;
+GLint  drawing_t::_shader_attr_pos = 0;
+GLint  drawing_t::_shader_attr_color = 0;
 
-stbgl_render_draw_t::stbgl_render_draw_t(uint32_t width, uint32_t height)
+drawing_t::drawing_t(uint32_t width, uint32_t height)
 	: _w(width), _h(height)
 {
 	if (0 == _shader_program)
@@ -19,13 +20,13 @@ stbgl_render_draw_t::stbgl_render_draw_t(uint32_t width, uint32_t height)
 	}
 }
 
-void stbgl_render_draw_t::clear(const stbgl_color_t &color)
+void drawing_t::clear(const color_t &color)
 {
 	set_color(color);
 	draw_rectangle(0, 0, _w, _h);
 }
 
-void stbgl_render_draw_t::draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+void drawing_t::draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	glEnable(GL_BLEND);
 	glUseProgram(_shader_program);
@@ -33,7 +34,7 @@ void stbgl_render_draw_t::draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uin
 
 	// Draw points
 	float triangleVertices[12];
-	stbgl_util_t::coord_rect(_w, _h, x, y, w, h, triangleVertices);
+	util_t::coord_rect(_w, _h, x, y, w, h, triangleVertices);
 
 	const float triangleColors[] =
 	{
@@ -54,12 +55,12 @@ void stbgl_render_draw_t::draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uin
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-bool stbgl_render_draw_t::prepare_shader()
+bool drawing_t::prepare_shader()
 {
 	_shader_program = glCreateProgram();
 
-	_shader_fragment = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_solid_frag(), GL_FRAGMENT_SHADER);
-	_shader_vertex   = stbgl_shader_t::load_shader_data(stbgl_shader_t::get_solid_vert(), GL_VERTEX_SHADER);
+	_shader_fragment = shader_t::load_shader_data(shader_t::get_solid_frag(), GL_FRAGMENT_SHADER);
+	_shader_vertex   = shader_t::load_shader_data(shader_t::get_solid_vert(), GL_VERTEX_SHADER);
 
 	glAttachShader(_shader_program, _shader_fragment);
 	glAttachShader(_shader_program, _shader_vertex);
