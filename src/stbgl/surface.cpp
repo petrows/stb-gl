@@ -5,6 +5,7 @@
 #include "texture.h"
 
 #include <iostream>
+#include <cstdlib>
 
 using namespace std;
 using namespace stbgl;
@@ -19,17 +20,20 @@ surface_t::surface_t(uint32_t w, uint32_t h, GLuint texture)
 	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
 
 	glEnable(GL_BLEND);
-	glGenTextures(1, &_texture);
+	if (0 == _texture)
+	{
+		glGenTextures(1, &_texture);
 
-	// "Bind" the newly created texture : all future texture functions will modify this texture
-	glBindTexture(GL_TEXTURE_2D, _texture);
+		// "Bind" the newly created texture : all future texture functions will modify this texture
+		glBindTexture(GL_TEXTURE_2D, _texture);
 
-	// Give an empty image to OpenGL ( the last "0" )
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		// Give an empty image to OpenGL ( the last "0" )
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
-	// Poor filtering. Needed !
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		// Poor filtering. Needed !
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	}
 
 	// Set "renderedTexture" as our colour attachement #0
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture, 0);
@@ -39,8 +43,7 @@ surface_t::surface_t(uint32_t w, uint32_t h, GLuint texture)
 
 	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
-		// std::stringstream ss; ss << "Wrong status: " << glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		// throw framebuffer_error_t(ss.str().c_str());
+		throw framebuffer_error_t(string("glCheckFramebufferStatus = ") + std::to_string(glCheckFramebufferStatus(GL_FRAMEBUFFER)));
 	}
 }
 
@@ -52,12 +55,17 @@ surface_t::~surface_t()
 
 surface_ptr_t surface_t::create(uint32_t w, uint32_t h)
 {
-	return std::make_shared<surface_t>(w, h, 0);
+	return surface_ptr_t(new surface_t(w, h, 0));
 }
 
 surface_ptr_t surface_t::create(uint32_t w, uint32_t h, GLuint texture)
 {
-	return std::make_shared<surface_t>(w, h, texture);
+	surface_t * s = new surface_t(w, h, 0);
+	s->set_current();
+	texture_t tex(w, h);
+	tex.draw(texture, 0, 0, w, h);
+
+	return surface_ptr_t(s);
 }
 
 surface_ptr_t surface_t::create_from_image(const char *path)
@@ -93,5 +101,7 @@ void surface_t::blit(surface_ptr_t &surface, uint32_t x, uint32_t y, uint32_t w,
 bool surface_t::set_current()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+	glBindTexture(GL_TEXTURE_2D, _texture);
+
 	glViewport(0, 0, _width, _height);
 }

@@ -61,7 +61,6 @@ void texture_t::draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_
 
 GLuint texture_t::load_file_to_texture(const char *path, uint32_t &w, uint32_t &h)
 {
-	int width, height;
 	GLuint res = texture_png(path, w, h);
 
 	if (!res)

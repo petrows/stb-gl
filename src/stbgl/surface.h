@@ -11,8 +11,9 @@ typedef std::shared_ptr<surface_t> surface_ptr_t;
 
 class surface_t
 {
-public:
+private:
 	surface_t(uint32_t w, uint32_t h, GLuint texture);
+public:
 	~surface_t();
 
 	static surface_ptr_t create(uint32_t w, uint32_t h); //! Creates new surface object
@@ -40,8 +41,6 @@ private:
 	GLint _shaderAttrPos; //Quad vertex positions
 	GLint _shaderAttrColor; //Vertex fill color
 };
-
-
 
 }
 
