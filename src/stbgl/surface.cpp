@@ -2,7 +2,7 @@
 #include "surface.h"
 #include "shader.h"
 #include "drawing.h"
-#include "texture.h"
+#include "blitting.h"
 
 #include <iostream>
 #include <cstdlib>
@@ -66,7 +66,7 @@ surface_ptr_t surface_t::create(uint32_t w, uint32_t h, GLuint &texture)
 {
 	surface_t * s = new surface_t(w, h, 0);
 	s->set_current();
-	texture_t tex(w, h);
+	blitting_t tex(w, h);
 	tex.draw(texture, 0, 0, w, h);
 	return surface_ptr_t(s);
 }
@@ -74,7 +74,7 @@ surface_ptr_t surface_t::create(uint32_t w, uint32_t h, GLuint &texture)
 surface_ptr_t surface_t::create_from_image(const char *path)
 {
 	uint32_t w, h;
-	GLuint texture = texture_t::load_file_to_texture(path, w, h);
+	GLuint texture = blitting_t::load_file_to_texture(path, w, h);
 	surface_ptr_t out = create(w, h, texture);
 	glDeleteTextures(1, &texture);
 	return out;
@@ -107,7 +107,7 @@ surface_t& surface_t::blit(surface_ptr_t &surface, uint32_t x, uint32_t y, uint3
 surface_t &surface_t::blit(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	set_current();
-	texture_t tex(_width, _height);
+	blitting_t tex(_width, _height);
 	tex.draw(texture, x, y, w, h);
 
 	return *this;

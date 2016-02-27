@@ -7,7 +7,7 @@
 #include "font.h"
 #include "image.h"
 #include "surface.h"
-#include "texture.h"
+#include "blitting.h"
 #include "util.h"
 
 #endif // STBGL_H

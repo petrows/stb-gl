@@ -41,7 +41,7 @@ bool Application::init(int argc, char **argv)
 
 	_test_surface_3 = surface_t::create_from_image("b2.png");
 
-	_bg_texture = texture_t::load_file_to_texture("bg.png");
+	_bg_texture = blitting_t::load_file_to_texture("bg.png");
 
 	return true;
 }
@@ -72,7 +72,7 @@ void Application::draw()
 	_ui_surface->set_current();
 
 	drawing_t draw(UI_W, UI_H);
-	texture_t tex(UI_W, UI_H);
+	blitting_t tex(UI_W, UI_H);
 
 	//draw.set_color(color_t(0x888800FF));
 	//draw.draw_rectangle(0, 0, SCREEN_W, SCREEN_H);
@@ -112,7 +112,7 @@ void Application::draw()
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	texture_t draw_main(SCREEN_W, SCREEN_H);
+	blitting_t draw_main(SCREEN_W, SCREEN_H);
 	draw_main.draw(_ui_surface->get_texture(), 0, 0, SCREEN_W, SCREEN_H);
 
 	//Draw order

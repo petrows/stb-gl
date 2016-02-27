@@ -1,15 +1,15 @@
-#ifndef STBGL_RENDER_TEXTURE_T_H
-#define STBGL_RENDER_TEXTURE_T_H
+#ifndef STBGL_BLITTING_T_H
+#define STBGL_BLITTING_T_H
 
 #include "global.h"
 #include "surface.h"
 
 namespace stbgl {
 
-class texture_t
+class blitting_t
 {
 public:
-	texture_t(uint32_t width, uint32_t height);
+	blitting_t(uint32_t width, uint32_t height);
 
 	void draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 
@@ -33,4 +33,4 @@ private:
 
 }
 
-#endif // STBGL_RENDER_TEXTURE_T_H
+#endif // STBGL_BLITTING_T_H

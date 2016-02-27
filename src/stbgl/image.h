@@ -10,7 +10,6 @@ class image_t
 {
 public:
 	static GLuint create_texture(const char *path);
-	static surface_t create_surface(const char *path);
 private:
 	image_t() {}
 };

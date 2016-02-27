@@ -1,4 +1,4 @@
-#include "texture.h"
+#include "blitting.h"
 #include "shader.h"
 #include "util.h"
 
@@ -9,12 +9,12 @@
 using namespace std;
 using namespace stbgl;
 
-GLuint texture_t::_shader_program = 0;
-GLint  texture_t::_shader_attr_pos = 0;
-GLint  texture_t::_shader_tex_uniform = 0;
-GLint  texture_t::_shader_tex_pos = 0;
+GLuint blitting_t::_shader_program = 0;
+GLint  blitting_t::_shader_attr_pos = 0;
+GLint  blitting_t::_shader_tex_uniform = 0;
+GLint  blitting_t::_shader_tex_pos = 0;
 
-texture_t::texture_t(uint32_t width, uint32_t height)
+blitting_t::blitting_t(uint32_t width, uint32_t height)
 	: _w(width), _h(height)
 {
 	if (0 == _shader_program)
@@ -23,7 +23,7 @@ texture_t::texture_t(uint32_t width, uint32_t height)
 	}
 }
 
-void texture_t::draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+void blitting_t::draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	glEnable(GL_BLEND);
 	glUseProgram(_shader_program);
@@ -59,7 +59,7 @@ void texture_t::draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-GLuint texture_t::load_file_to_texture(const char *path, uint32_t &w, uint32_t &h)
+GLuint blitting_t::load_file_to_texture(const char *path, uint32_t &w, uint32_t &h)
 {
 	GLuint res = texture_png(path, w, h);
 
@@ -73,7 +73,7 @@ GLuint texture_t::load_file_to_texture(const char *path, uint32_t &w, uint32_t &
 	return res;
 }
 
-GLuint texture_t::texture_png(const char *path, uint32_t &width, uint32_t &height)
+GLuint blitting_t::texture_png(const char *path, uint32_t &width, uint32_t &height)
 {
 	png_byte header[8];
 
@@ -196,7 +196,7 @@ GLuint texture_t::texture_png(const char *path, uint32_t &width, uint32_t &heigh
 	return texture;
 }
 
-bool texture_t::prepare_shader()
+bool blitting_t::prepare_shader()
 {
 	_shader_program = glCreateProgram();
 
