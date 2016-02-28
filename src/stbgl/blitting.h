@@ -9,20 +9,20 @@ namespace stbgl {
 class blitting_t
 {
 public:
-	blitting_t(uint32_t width, uint32_t height);
-	void draw(texture_id_t texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
+	blitting_t(std::uint32_t width, std::uint32_t height);
+	void draw(texture_id_t texture, std::uint32_t x, std::uint32_t y, std::uint32_t w, std::uint32_t h);
 
-	static GLuint load_file_to_texture(const char *path) { uint32_t w, h; return load_file_to_texture(path, w, h); }
-	static GLuint load_file_to_texture(const char *path, uint32_t &w, uint32_t &h);
+	static GLuint load_file_to_texture(const char *path) { std::uint32_t w, h; return load_file_to_texture(path, w, h); }
+	static GLuint load_file_to_texture(const char *path, std::uint32_t &w, std::uint32_t &h);
 private:
 
-	static GLuint texture_png(const char *path, uint32_t &width, uint32_t &height);
+	static GLuint texture_png(const char *path, std::uint32_t &width, std::uint32_t &height);
 
 	bool prepare_shader();
-	const uint32_t _w, _h;
+	const std::uint32_t _w, _h;
 
-	GLuint _shader_fragment;
-	GLuint _shader_vertex;
+	shader_id_t _shader_fragment;
+	shader_id_t _shader_vertex;
 
 	static GLuint	_shader_program;
 	static GLint	_shader_attr_pos; //Quad vertex positions

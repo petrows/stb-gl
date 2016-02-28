@@ -31,10 +31,9 @@ shader_id_t shader_t::load_shader_data(const char *data, int type)
 	return shader;
 }
 
-shader_id_t shader_t::load_shader_file(const char *filename, int type)
+shader_id_t shader_t::load_shader_file(const string &filename, int type)
 {
 	ifstream shader_file(filename);
-
 	string shader_data((istreambuf_iterator<char>(shader_file)), istreambuf_iterator<char>());
 
 	return load_shader_data(shader_data.c_str(), type);

@@ -25,11 +25,11 @@ public:
 	}
 
 public:
-	const static uint32_t SCREEN_W = 1920;
-	const static uint32_t SCREEN_H = 1080;
+	const static std::uint32_t SCREEN_W = 1920;
+	const static std::uint32_t SCREEN_H = 1080;
 
-	const static uint32_t UI_W = 1280;
-	const static uint32_t UI_H = 720;
+	const static std::uint32_t UI_W = 1280;
+	const static std::uint32_t UI_H = 720;
 
 	Application();
 	bool init(int argc, char **argv);

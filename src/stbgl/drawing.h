@@ -9,18 +9,18 @@ namespace stbgl {
 class drawing_t
 {
 public:
-	drawing_t(uint32_t width, uint32_t height);
+	drawing_t(std::uint32_t width, std::uint32_t height);
 
 	void clear(const color_t &color);
 	void set_color(const color_t &color) { _color = color; }
-	void draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h);
+	void draw_rectangle(std::uint32_t x, std::uint32_t y, std::uint32_t w, std::uint32_t h);
 private:
 	bool prepare_shader();
-	const uint32_t _w, _h;
+	const std::uint32_t _w, _h;
 	color_t _color;
 
-	GLuint _shader_fragment;
-	GLuint _shader_vertex;
+	shader_id_t _shader_fragment;
+	shader_id_t _shader_vertex;
 
 	static GLuint	_shader_program;
 	static GLint	_shader_attr_pos; //Quad vertex positions

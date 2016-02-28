@@ -11,7 +11,7 @@ private:
 	shader_t() {}
 public:
 	static shader_id_t load_shader_data(const char *data, int type);
-	static shader_id_t load_shader_file(const char *filename, int type);
+	static shader_id_t load_shader_file(const std::string &filename, int type);
 
 	static const char * get_solid_frag();
 	static const char * get_solid_vert();

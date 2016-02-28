@@ -11,7 +11,7 @@ typedef std::shared_ptr<texture_t> texture_ptr_t;
 class texture_t
 {
 protected:
-	texture_t(uint32_t w, uint32_t h, texture_id_t texture);
+	texture_t(std::uint32_t w, std::uint32_t h, texture_id_t texture);
 public:
 	~texture_t();
 
@@ -23,7 +23,7 @@ public:
 	texture_t(const texture_t&) = delete;
 private:
 	const texture_id_t _id;
-	const uint32_t _width, _height;
+	const std::uint32_t _width, _height;
 };
 
 }

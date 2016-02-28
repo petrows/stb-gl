@@ -2,7 +2,7 @@
 #define STBGL_GLOBAL_H
 
 // Common C headers
-#include <stdint.h>
+#include <cstdint>
 
 // C++ headers
 #include <map>
