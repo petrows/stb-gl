@@ -11,8 +11,6 @@ file (GLOB_RECURSE APP_H "src/app/*.h")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
-# apt-get install libxmu-dev libxi-dev freeglut3 freeglut3-dev libsoil-dev libpng12-dev
-
 find_package(GLUT REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(PNG REQUIRED)

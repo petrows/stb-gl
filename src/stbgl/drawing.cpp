@@ -8,9 +8,9 @@
 using namespace std;
 using namespace stbgl;
 
-GLuint drawing_t::_shader_program = 0;
-GLint  drawing_t::_shader_attr_pos = 0;
-GLint  drawing_t::_shader_attr_color = 0;
+shader_program_id_t drawing_t::_shader_program = 0;
+shader_attrib_id_t  drawing_t::_shader_attr_pos = 0;
+shader_attrib_id_t  drawing_t::_shader_attr_color = 0;
 
 drawing_t::drawing_t(unsigned int width, unsigned int height)
 	: _w(width), _h(height)

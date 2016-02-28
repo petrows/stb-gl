@@ -22,7 +22,7 @@ public:
 	const static std::uint32_t UI_H = 720;
 
 	Application() {}
-	bool init(int argc, char **argv);
+	bool init();
 	void draw();
 private:
 	stbgl::surface_ptr_t _ui_surface;
@@ -30,7 +30,7 @@ private:
 	stbgl::surface_ptr_t _test_surface_1;
 	stbgl::surface_ptr_t _test_surface_2;
 	stbgl::surface_ptr_t _test_surface_3;
-	stbgl::font_t * _font;
+	stbgl::font_ptr_t	 _font;
 
 	stbgl::texture_ptr_t _bg_texture;
 };

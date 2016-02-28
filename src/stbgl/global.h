@@ -10,11 +10,14 @@
 #include <iostream>
 #include <exception>
 #include <memory>
+#include <vector>
 
 // Open GL ES
 #include <GLES2/gl2.h>
 
 namespace stbgl {
+
+typedef std::vector<std::uint8_t> buffer_t;
 
 typedef GLuint	shader_id_t;
 typedef GLuint	shader_program_id_t;

@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	glutInitWindowSize(Application::SCREEN_W, Application::SCREEN_H);
 	glutCreateWindow("OpenGL");
 
-	if (!Application::getInstance()->init(argc, argv))
+	if (!Application::getInstance()->init())
 		return 1;
 
 	glutTimerFunc(10, &opengl_on_timer, 1);

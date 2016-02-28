@@ -11,7 +11,7 @@
 using namespace std;
 using namespace stbgl;
 
-surface_t::surface_t(unsigned int w, unsigned int h)
+surface_t::surface_t(unsigned int w, unsigned int h, texture_ptr_t texture)
 	: _framebuffer(0)
 	, _width(w)
 	, _height(h)
@@ -21,13 +21,22 @@ surface_t::surface_t(unsigned int w, unsigned int h)
 
 	glEnable(GL_BLEND);
 
-	_texture = texture_t::create(w, h);
+	if (nullptr == texture)
+	{
+		_texture = texture_t::create(w, h);
+	} else {
+		_texture = texture;
+	}
 
 	// Set "renderedTexture" as our colour attachement #0
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->id(), 0);
 
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(0, 0, 0, 0);
+	if (nullptr == texture)
+	{
+		// Clear newbie texture
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0, 0, 0, 0);
+	}
 
 	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -42,30 +51,25 @@ surface_t::~surface_t()
 
 surface_ptr_t surface_t::create(unsigned int w, unsigned int h)
 {
-	return surface_ptr_t(new surface_t(w, h));
+	return surface_ptr_t(new surface_t(w, h, nullptr));
 }
 
-surface_ptr_t surface_t::create(unsigned int w, unsigned int h, const texture_ptr_t &texture)
+surface_ptr_t surface_t::create(texture_ptr_t texture)
 {
-	surface_t * s = new surface_t(w, h);
-	s->set_current();
-	blitting_t tex(w, h);
-	tex.draw(texture, 0, 0, w, h);
-	return surface_ptr_t(s);
+	return surface_ptr_t(new surface_t(texture->width(), texture->height(), texture));
 }
 
-surface_ptr_t surface_t::create(const string &&image_path)
+surface_ptr_t surface_t::create(const string &image_path)
 {
-	texture_ptr_t texture = image_t::create(image_path);
-	return create(texture->width(), texture->height(), texture);
+	return create(image_t::create(image_path));
 }
 
-surface_t& surface_t::fill_rect(uint32_t color_rgba, int x, int y, unsigned int w, unsigned int h)
+surface_t& surface_t::fill_rect(const color_t &color, int x, int y, unsigned int w, unsigned int h)
 {
 	set_current();
 
 	drawing_t render(_width, _height);
-	render.set_color(color_rgba);
+	render.set_color(color);
 	render.draw_rectangle(x, y, w, h);
 
 	if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -91,6 +95,17 @@ surface_t &surface_t::blit(const texture_ptr_t &texture, int x, int y, unsigned 
 	tex.draw(texture, x, y, w, h);
 
 	return *this;
+}
+
+void surface_t::memory_lock(buffer_t &data)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+	_texture->get_pixels(data);
+}
+
+void surface_t::memory_unlock(buffer_t &data)
+{
+	_texture->set_pixels(data);
 }
 
 surface_t& surface_t::set_current()

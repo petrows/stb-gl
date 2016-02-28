@@ -15,8 +15,12 @@ public:
 
 	static const char * get_solid_frag();
 	static const char * get_solid_vert();
+
 	static const char * get_texture_frag();
 	static const char * get_texture_vert();
+
+	static const char * get_font_frag();
+	static const char * get_font_vert();
 };
 
 }

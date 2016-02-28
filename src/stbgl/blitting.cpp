@@ -10,10 +10,10 @@
 using namespace std;
 using namespace stbgl;
 
-GLuint blitting_t::_shader_program = 0;
-GLint  blitting_t::_shader_attr_pos = 0;
-GLint  blitting_t::_shader_tex_uniform = 0;
-GLint  blitting_t::_shader_tex_pos = 0;
+shader_program_id_t blitting_t::_shader_program = 0;
+shader_attrib_id_t  blitting_t::_shader_attr_pos = 0;
+shader_attrib_id_t  blitting_t::_shader_tex_uniform = 0;
+shader_attrib_id_t  blitting_t::_shader_tex_pos = 0;
 
 blitting_t::blitting_t(uint32_t width, uint32_t height)
 	: _w(width), _h(height)
@@ -26,6 +26,9 @@ blitting_t::blitting_t(uint32_t width, uint32_t height)
 
 void blitting_t::draw(const texture_ptr_t &texture, int x, int y, unsigned int w, unsigned int h)
 {
+	if (0 == w) w = texture->width();
+	if (0 == h) h = texture->height();
+
 	glEnable(GL_BLEND);
 	glUseProgram(_shader_program);
 	glViewport(0, 0, _w, _h);
@@ -85,13 +88,11 @@ bool blitting_t::prepare_shader()
 	_shader_tex_pos =glGetAttribLocation (_shader_program, "a_v2TextCoord");
 	if (0 > _shader_tex_pos)
 	{
-		cerr << "Tex pos error!" << endl;
 		throw shader_error_t("Error create shader texture pos: " + glGetError());
 	}
 	_shader_tex_uniform = glGetUniformLocation(_shader_program, "Texture");
 	if (0 > _shader_tex_uniform)
 	{
-		cout << "img_texture_uniform error!" << endl;
 		throw shader_error_t("Error create shader uniform: " + glGetError());
 	}
 

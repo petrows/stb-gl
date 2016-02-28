@@ -10,13 +10,13 @@ class blitting_t
 {
 public:
 	blitting_t(std::uint32_t width, std::uint32_t height);
-	void draw(const surface_ptr_t &surface, int x, int y, unsigned int w, unsigned int h) { return draw(surface->texture(), x, y, w, h); }
-	void draw(const texture_ptr_t &texture, int x, int y, unsigned int w, unsigned int h);
+	void draw(const surface_ptr_t &surface, int x, int y, unsigned int w = 0, unsigned int h = 0) { return draw(surface->texture(), x, y, w, h); }
+	void draw(const texture_ptr_t &texture, int x, int y, unsigned int w = 0, unsigned int h = 0);
 
 private:
 	bool prepare_shader();
 
-	const std::uint32_t _w, _h;
+	const unsigned int _w, _h;
 
 	shader_id_t _shader_fragment;
 	shader_id_t _shader_vertex;

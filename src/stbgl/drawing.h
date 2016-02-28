@@ -23,8 +23,8 @@ private:
 	shader_id_t _shader_vertex;
 
 	static shader_program_id_t	_shader_program;
-	static shader_attrib_id_t	_shader_attr_pos; //Quad vertex positions
-	static shader_attrib_id_t	_shader_attr_color; //Vertex fill color
+	static shader_attrib_id_t	_shader_attr_pos;
+	static shader_attrib_id_t	_shader_attr_color;
 };
 
 }

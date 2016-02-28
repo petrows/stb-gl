@@ -43,6 +43,17 @@ private:
 	};
 
 	std::map< FT_ULong, _glyth_t > _cache;
+
+	bool prepare_shader();
+
+	shader_id_t _shader_fragment;
+	shader_id_t _shader_vertex;
+
+	static shader_program_id_t	_shader_program;
+	static shader_attrib_id_t	_shader_attr_pos;
+	static shader_attrib_id_t	_shader_attr_color;
+	static shader_attrib_id_t	_shader_tex_uniform;
+	static shader_attrib_id_t	_shader_tex_pos;
 };
 
 }

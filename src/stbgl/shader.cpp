@@ -41,50 +41,82 @@ shader_id_t shader_t::load_shader_file(const string &filename, int type)
 const char *shader_t::get_solid_frag()
 {
 	return " \
-	varying vec4 v_v4FillColor;			\
-	void main() {						\
-		gl_FragColor = v_v4FillColor;	\
-	}";
+varying vec4 v_v4FillColor;			\
+void main() {						\
+	gl_FragColor = v_v4FillColor;	\
+}";
 }
 
 const char *shader_t::get_solid_vert()
 {
 	return " \
-	attribute vec4 a_v4Position;		\
-	attribute vec4 a_v4FillColor;		\
-	varying vec4 v_v4FillColor;			\
-	void main()	{						\
-		v_v4FillColor = a_v4FillColor;	\
-		gl_Position = a_v4Position;		\
-	}";
+attribute vec4 a_v4Position;		\
+attribute vec4 a_v4FillColor;		\
+varying vec4 v_v4FillColor;			\
+void main()	{						\
+	v_v4FillColor = a_v4FillColor;	\
+	gl_Position = a_v4Position;		\
+}";
 }
 
 const char *shader_t::get_texture_frag()
 {
 	return " \
-	#ifndef GLES2						\n\
-	#define lowp						\n\
-	#else								\n\
-	precision mediump float;			\n\
-	#endif								\n\
-	varying lowp vec2 TexCoordOut;		\
-	uniform sampler2D Texture;			\
-	void main() {						\
-		  gl_FragColor = texture2D(Texture, TexCoordOut); \
-	}";
+#ifndef GLES2						\n\
+#define lowp						\n\
+#else								\n\
+precision mediump float;			\n\
+#endif								\n\
+varying lowp vec2 TexCoordOut;		\
+uniform sampler2D Texture;			\
+void main() {						\
+	  gl_FragColor = texture2D(Texture, TexCoordOut); \
+}";
 }
 
 const char *shader_t::get_texture_vert()
 {
 	return " \
-	attribute vec4 a_v4Position;		\
-	attribute vec4 a_v4FillColor;		\
-	attribute vec2 a_v2TextCoord;		\
-	varying vec4 v_v4FillColor;			\
-	varying vec2 TexCoordOut;			\
-	void main() {						\
-		v_v4FillColor = a_v4FillColor;	\
-		gl_Position = a_v4Position;		\
-		TexCoordOut = a_v2TextCoord;	\
-	}";
+attribute vec4 a_v4Position;		\
+attribute vec4 a_v4FillColor;		\
+attribute vec2 a_v2TextCoord;		\
+varying vec4 v_v4FillColor;			\
+varying vec2 TexCoordOut;			\
+void main() {						\
+	v_v4FillColor = a_v4FillColor;	\
+	gl_Position = a_v4Position;		\
+	TexCoordOut = a_v2TextCoord;	\
+}";
+}
+
+const char *shader_t::get_font_frag()
+{
+return " \
+#ifndef GLES2						\n\
+#define lowp						\n\
+#else								\n\
+precision mediump float;			\n\
+#endif								\n\
+varying vec4 v_v4FillColor;			\
+varying lowp vec2 TexCoordOut;		\
+uniform sampler2D Texture;			\
+void main()	{						\
+	gl_FragColor = v_v4FillColor;	\
+	gl_FragColor.w *= texture2D(Texture, TexCoordOut).w;	\
+}";
+}
+
+const char *shader_t::get_font_vert()
+{
+return " \
+attribute vec4 a_v4Position;		\
+attribute vec4 a_v4FillColor;		\
+varying vec4 v_v4FillColor;			\
+attribute vec2 a_v2TextCoord;		\
+varying vec2 TexCoordOut;			\
+void main() {						\
+	v_v4FillColor = a_v4FillColor;	\
+	gl_Position = a_v4Position;		\
+	TexCoordOut = a_v2TextCoord;	\
+}";
 }
