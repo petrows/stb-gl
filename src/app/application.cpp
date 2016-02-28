@@ -12,7 +12,7 @@ bool Application::init(int argc, char **argv)
 {
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-	_font = new font_t("font.ttf", 20);
+	// _font = new font_t("font.ttf", 20);
 
 	_ui_surface = surface_t::create(UI_W, UI_H);
 

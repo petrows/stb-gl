@@ -11,22 +11,22 @@ typedef std::shared_ptr<texture_t> texture_ptr_t;
 class texture_t
 {
 protected:
-	texture_t(std::uint32_t w, std::uint32_t h, texture_id_t texture);
+	texture_t(unsigned int w, unsigned int h, texture_id_t texture);
 public:
 	~texture_t();
 
-	static texture_ptr_t create(std::uint32_t w, std::uint32_t h, const texture_id_t texture = 0);
+	static texture_ptr_t create(unsigned int w, unsigned int h, const texture_id_t texture = 0);
 
 	texture_id_t id() { return _id; }
 
-	std::uint32_t width() { return _width; }
-	std::uint32_t height() { return _height; }
+	unsigned int width() { return _width; }
+	unsigned int height() { return _height; }
 
 	// Disable copy
 	texture_t(const texture_t&) = delete;
 private:
 	texture_id_t _id;
-	const std::uint32_t _width, _height;
+	const unsigned int _width, _height;
 };
 
 }

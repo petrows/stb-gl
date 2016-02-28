@@ -50,7 +50,7 @@ private:
 	public:
 		png_reader_t();
 		~png_reader_t();
-		texture_id_t load_png(const std::uint8_t *data, const std::size_t size, std::uint32_t &width, std::uint32_t &height);
+		texture_id_t load_png(const std::uint8_t *data, const std::size_t size, unsigned int &width, unsigned int &height);
 	};
 #endif
 

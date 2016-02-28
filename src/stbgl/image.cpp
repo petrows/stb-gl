@@ -34,7 +34,7 @@ texture_ptr_t image_t::create(const string &path)
 
 texture_ptr_t image_t::create(const uint8_t *data, size_t size)
 {
-	uint32_t w, h;
+	unsigned int w, h;
 	// Try to detect file type now
 #if defined(STBGL_ENABLE_PNG)
 	if (detect_image_png(data, size))
@@ -94,7 +94,7 @@ image_t::png_reader_t::~png_reader_t()
 	png_destroy_read_struct(&_png_ptr, &_info_ptr, png_infopp_NULL);
 }
 
-texture_id_t image_t::png_reader_t::load_png(const uint8_t *data, const size_t size, uint32_t &width, uint32_t &height)
+texture_id_t image_t::png_reader_t::load_png(const uint8_t *data, const size_t size, unsigned int &width, unsigned int &height)
 {
 	memory_reader_state.buffer = (unsigned char *)data;
 	memory_reader_state.bufsize = size;

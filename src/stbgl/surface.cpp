@@ -11,7 +11,7 @@
 using namespace std;
 using namespace stbgl;
 
-surface_t::surface_t(uint32_t w, uint32_t h)
+surface_t::surface_t(unsigned int w, unsigned int h)
 	: _framebuffer(0)
 	, _width(w)
 	, _height(h)
@@ -40,12 +40,12 @@ surface_t::~surface_t()
 	glDeleteFramebuffers(1, &_framebuffer);
 }
 
-surface_ptr_t surface_t::create(uint32_t w, uint32_t h)
+surface_ptr_t surface_t::create(unsigned int w, unsigned int h)
 {
 	return surface_ptr_t(new surface_t(w, h));
 }
 
-surface_ptr_t surface_t::create(uint32_t w, uint32_t h, const texture_ptr_t &texture)
+surface_ptr_t surface_t::create(unsigned int w, unsigned int h, const texture_ptr_t &texture)
 {
 	surface_t * s = new surface_t(w, h);
 	s->set_current();
@@ -60,7 +60,7 @@ surface_ptr_t surface_t::create(const string &&image_path)
 	return create(texture->width(), texture->height(), texture);
 }
 
-surface_t& surface_t::fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+surface_t& surface_t::fill_rect(uint32_t color_rgba, int x, int y, unsigned int w, unsigned int h)
 {
 	set_current();
 
@@ -76,12 +76,12 @@ surface_t& surface_t::fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uin
 	return *this;
 }
 
-surface_t& surface_t::blit(const surface_ptr_t &surface, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+surface_t& surface_t::blit(const surface_ptr_t &surface, int x, int y, unsigned int w, unsigned int h)
 {
 	return blit(surface->texture(), x, y, w, h);
 }
 
-surface_t &surface_t::blit(const texture_ptr_t &texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+surface_t &surface_t::blit(const texture_ptr_t &texture, int x, int y, unsigned int w, unsigned int h)
 {
 	if (!w) w = texture->width();
 	if (!h) h = texture->height();

@@ -12,7 +12,7 @@ GLuint drawing_t::_shader_program = 0;
 GLint  drawing_t::_shader_attr_pos = 0;
 GLint  drawing_t::_shader_attr_color = 0;
 
-drawing_t::drawing_t(uint32_t width, uint32_t height)
+drawing_t::drawing_t(unsigned int width, unsigned int height)
 	: _w(width), _h(height)
 {
 	if (0 == _shader_program)
@@ -27,7 +27,7 @@ void drawing_t::clear(const color_t &color)
 	draw_rectangle(0, 0, _w, _h);
 }
 
-void drawing_t::draw_rectangle(uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+void drawing_t::draw_rectangle(int x, int y, unsigned int w, unsigned int h)
 {
 	glEnable(GL_BLEND);
 	glUseProgram(_shader_program);

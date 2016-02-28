@@ -5,12 +5,16 @@
 
 namespace stbgl {
 
+class font_t;
+typedef std::shared_ptr<font_t> font_ptr_t;
+
 class font_t
 {
+private:
+	font_t(const std::string &path, unsigned int size);
 public:
-	font_t(const char *path, std::uint32_t size);
-
-	void draw_string(const char *utf8, std::uint32_t x, std::uint32_t y);
+	static font_ptr_t create(const std::string &path, unsigned int size);
+	void draw(const std::string &text_utf8, int x, int y);
 
 private:
 

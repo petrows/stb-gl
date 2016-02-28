@@ -24,7 +24,7 @@ blitting_t::blitting_t(uint32_t width, uint32_t height)
 	}
 }
 
-void blitting_t::draw(const texture_ptr_t &texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+void blitting_t::draw(const texture_ptr_t &texture, int x, int y, unsigned int w, unsigned int h)
 {
 	glEnable(GL_BLEND);
 	glUseProgram(_shader_program);
