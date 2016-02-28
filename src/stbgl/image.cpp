@@ -74,6 +74,17 @@ bool image_t::detect_image_jpg(const uint8_t *data, const size_t size)
 	return true;
 }
 
+void image_t::png_reader_t::read_data_memory(png_structp png_ptr, png_bytep data, png_uint_32 length)
+{
+	_png_reader_memory_state *f = (_png_reader_memory_state *)png_get_io_ptr(png_ptr);
+	if (length > (f->bufsize - f->current_pos))
+	{
+		throw image_error_t("Error at read_data_memory");
+	}
+	memcpy(data, f->buffer + f->current_pos, length);
+	f->current_pos += length;
+}
+
 void image_t::png_reader_t::load_info()
 {
 	_width			= png_get_image_width(_png_ptr, _info_ptr);

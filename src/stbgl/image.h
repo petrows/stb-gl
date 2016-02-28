@@ -39,13 +39,7 @@ private:
 		png_infop _info_ptr;
 		int _bit_depth, _channels, _color_type, _interlace_type;
 		int _width, _height;
-		static void read_data_memory(png_structp png_ptr, png_bytep data, png_uint_32 length)
-		{
-			_png_reader_memory_state *f = (_png_reader_memory_state *)png_get_io_ptr(png_ptr);
-			if (length > (f->bufsize - f->current_pos)) png_error(png_ptr, "read error in read_data_memory (loadpng)");
-			memcpy(data, f->buffer + f->current_pos, length);
-			f->current_pos += length;
-		}
+		static void read_data_memory(png_structp png_ptr, png_bytep data, png_uint_32 length);
 		void load_info();
 	public:
 		png_reader_t();
