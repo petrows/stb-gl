@@ -1,4 +1,5 @@
 #include "blitting.h"
+#include "image.h"
 #include "shader.h"
 #include "util.h"
 
@@ -61,7 +62,7 @@ void blitting_t::draw(texture_id_t texture, uint32_t x, uint32_t y, uint32_t w, 
 
 GLuint blitting_t::load_file_to_texture(const char *path, uint32_t &w, uint32_t &h)
 {
-	GLuint res = texture_png(path, w, h);
+	GLuint res = image_t::create_texture(path, w, h);
 
 	if (!res)
 	{
@@ -173,7 +174,7 @@ GLuint blitting_t::texture_png(const char *path, uint32_t &width, uint32_t &heig
 		return 0;
 	}
 	// set the individual row_pointers to point at the correct offsets of image_data
-	for (int i = 0; i < height; ++i)
+	for (uint32_t i = 0; i < height; ++i)
 		row_pointers[height - i - 1] = image_data + i * rowbytes;
 
 	//read the png into image_data through row_pointers

@@ -34,9 +34,9 @@ public:
 	// Disable copy
 	surface_t(const surface_t&) = delete;
 private:
-	const uint32_t _width, _height;
-	GLuint _framebuffer;
 	GLuint _texture;
+	GLuint _framebuffer;
+	const uint32_t _width, _height;
 	GLuint _shaderProgram;
 
 	GLuint _shaderVertexSolid;

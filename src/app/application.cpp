@@ -31,7 +31,7 @@ bool Application::init(int argc, char **argv)
 
 	_ui_surface = surface_t::create(UI_W, UI_H);
 
-	_test_surface_1 = surface_t::create_from_image("b.png");
+	_test_surface_1 = surface_t::create_from_image("ts.png");
 
 	_test_surface_2 = surface_t::create(512, 256);
 	_test_surface_2->clear(0xFF00FF33);
@@ -83,11 +83,11 @@ void Application::draw()
 
 	// Horz lines
 	draw.set_color(color_t(0x66666666));
-	for (int y=0; y<UI_H; y+=64)
+	for (uint32_t y=0; y<UI_H; y+=64)
 	{
 		draw.draw_rectangle(0, y, UI_W, 1);
 	}
-	for (int x=0; x<UI_W; x+=64)
+	for (uint32_t x=0; x<UI_W; x+=64)
 	{
 		draw.draw_rectangle(x, 0, 1, UI_H);
 	}

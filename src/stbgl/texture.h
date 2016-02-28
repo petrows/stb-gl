@@ -22,8 +22,8 @@ public:
 	// Disable copy
 	texture_t(const texture_t&) = delete;
 private:
+	const texture_id_t _id;
 	const uint32_t _width, _height;
-	const GLuint _id;
 };
 
 }

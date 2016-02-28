@@ -9,7 +9,7 @@ file (GLOB_RECURSE HAL_H "src/stbgl/*.h")
 file (GLOB_RECURSE APP_SRC "src/app/*.cpp")
 file (GLOB_RECURSE APP_H "src/app/*.h")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
 # apt-get install libxmu-dev libxi-dev freeglut3 freeglut3-dev libsoil-dev libpng12-dev
 
