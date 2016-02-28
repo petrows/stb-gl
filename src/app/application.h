@@ -3,16 +3,6 @@
 
 #include <stbgl/stbgl.h>
 
-#include <list>
-#include <iostream>
-#include <string>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <GL/glut.h>
-
-
-
 class Application
 {
 private:
@@ -31,16 +21,10 @@ public:
 	const static std::uint32_t UI_W = 1280;
 	const static std::uint32_t UI_H = 720;
 
-	Application();
+	Application() {}
 	bool init(int argc, char **argv);
-	int run();
-
-private:
-	static void drawStatic();
-	static void timerStatic(int te);
 	void draw();
-
-
+private:
 	stbgl::surface_ptr_t _ui_surface;
 
 	stbgl::surface_ptr_t _test_surface_1;
@@ -48,7 +32,7 @@ private:
 	stbgl::surface_ptr_t _test_surface_3;
 	stbgl::font_t * _font;
 
-	GLuint _bg_texture;
+	stbgl::texture_ptr_t _bg_texture;
 };
 
 #endif // APPLICATION_H

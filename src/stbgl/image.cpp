@@ -7,7 +7,7 @@
 using namespace std;
 using namespace stbgl;
 
-texture_id_t image_t::create(const string &path, uint32_t &w, uint32_t &h)
+texture_ptr_t image_t::create(const string &path)
 {
 	ifstream in_file(path, std::ios::binary);
 
@@ -27,18 +27,22 @@ texture_id_t image_t::create(const string &path, uint32_t &w, uint32_t &h)
 	// read the data:
 	data.assign(istream_iterator<uint8_t>(in_file), istream_iterator<uint8_t>());
 
-	return create(data.data(), data.size(), w, h);
+	texture_ptr_t ret = create(data.data(), data.size());
+	cout << "Loaded image '" << path << "', size " << ret->width() << "x" << ret->height() << endl;
+	return ret;
 }
 
-texture_id_t image_t::create(const uint8_t *data, size_t size, uint32_t &w, uint32_t &h)
+texture_ptr_t image_t::create(const uint8_t *data, size_t size)
 {
+	uint32_t w, h;
 	// Try to detect file type now
 #if defined(STBGL_ENABLE_PNG)
 	if (detect_image_png(data, size))
 	{
 		png_reader_t reader;
 		// PNG image
-		return reader.load_png(data, size, w, h);
+		texture_id_t tex = reader.load_png(data, size, w, h);
+		return texture_t::create(w, h, tex);
 	}
 #endif
 

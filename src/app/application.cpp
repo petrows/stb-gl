@@ -8,63 +8,27 @@ using namespace stbgl;
 
 Application *Application::_instance = NULL;
 
-Application::Application()
-{
-cout << "Init..." << endl;
-}
-
 bool Application::init(int argc, char **argv)
 {
-
-	cout << "Init..." << endl;
-	glutInit(&argc, argv);
-
-	//Simple buffer
-	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA);
-	// glutInitWindowPosition(150, 125);
-	glutInitWindowSize(SCREEN_W, SCREEN_H);
-	glutCreateWindow("OpenGL");
-
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
 	_font = new font_t("font.ttf", 20);
 
 	_ui_surface = surface_t::create(UI_W, UI_H);
 
-	_test_surface_1 = surface_t::create_from_image("ts.png");
+	_test_surface_1 = surface_t::create("ts.png");
 
 	_test_surface_2 = surface_t::create(512, 256);
 	_test_surface_2->clear(0xFF00FF33);
 	_test_surface_2->fill_rect(0x00FFFFFF, 10, 20, 40, 80);
-	_test_surface_2->blit(_test_surface_1, 0, 0, _test_surface_2->width(), _test_surface_2->height());
+	_test_surface_2->blit(_test_surface_1, 0, 0, _test_surface_1->width()/10, _test_surface_1->height()/10);
 	//_test_surface_2->load_image("b.png");
 
-	_test_surface_3 = surface_t::create_from_image("b2.png");
+	_test_surface_3 = surface_t::create("b2.png");
 
-	//uint32_t w, h;
-	//_bg_texture = image_t::create("bg.png", w, h);
+	_bg_texture = image_t::create("bg.png");
 
 	return true;
-}
-
-int Application::run()
-{
-	//Call to the drawing function
-	glutTimerFunc(10, &Application::timerStatic, 1);
-	glutDisplayFunc(&Application::drawStatic);
-	glutMainLoop();
-	return 0;
-}
-
-void Application::drawStatic()
-{
-	Application::getInstance()->draw();
-}
-
-void Application::timerStatic(int te)
-{
-	glutPostRedisplay(); // Redraw screen with new object data.
-	glutTimerFunc(10, &Application::timerStatic, 1);
 }
 
 void Application::draw()
@@ -93,14 +57,14 @@ void Application::draw()
 		draw.draw_rectangle(x, 0, 1, UI_H);
 	}
 
-	tex.draw(_test_surface_2->get_texture()->get_id(), 150, 150, _test_surface_2->width(), _test_surface_2->height());
+	tex.draw(_test_surface_2, 150, 150, _test_surface_2->width(), _test_surface_2->height());
 
 	//util_t::set_clip_rect(SCREEN_W, SCREEN_H, 100, 100, 400, 400);
 
-	tex.draw(_test_surface_1->get_texture()->get_id(), 300, 300, 500, 500);
+	tex.draw(_test_surface_1, 300, 300, _test_surface_1->width(), _test_surface_1->height());
 
 
-	tex.draw(_test_surface_3->get_texture()->get_id(), 768, 200, _test_surface_3->width(), _test_surface_3->height());
+	tex.draw(_test_surface_3, 768, 200, _test_surface_3->width(), _test_surface_3->height());
 	//util_t::reset_clip_rect();
 
 	draw.set_color(color_t(0xFF00FF33));
@@ -114,9 +78,6 @@ void Application::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	blitting_t draw_main(SCREEN_W, SCREEN_H);
-	draw_main.draw(_ui_surface->get_texture()->get_id(), 0, 0, SCREEN_W, SCREEN_H);
-
-	//Draw order
-	glutSwapBuffers();
+	draw_main.draw(_ui_surface, 0, 0, SCREEN_W, SCREEN_H);
 }
 

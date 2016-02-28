@@ -12,7 +12,7 @@ using namespace std;
 using namespace stbgl;
 
 surface_t::surface_t(uint32_t w, uint32_t h)
-	: _framebuffer(NULL)
+	: _framebuffer(0)
 	, _width(w)
 	, _height(h)
 {
@@ -24,7 +24,7 @@ surface_t::surface_t(uint32_t w, uint32_t h)
 	_texture = texture_t::create(w, h);
 
 	// Set "renderedTexture" as our colour attachement #0
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->get_id(), 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->id(), 0);
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0, 0, 0, 0);
@@ -45,7 +45,7 @@ surface_ptr_t surface_t::create(uint32_t w, uint32_t h)
 	return surface_ptr_t(new surface_t(w, h));
 }
 
-surface_ptr_t surface_t::create(uint32_t w, uint32_t h, texture_id_t &texture)
+surface_ptr_t surface_t::create(uint32_t w, uint32_t h, const texture_ptr_t &texture)
 {
 	surface_t * s = new surface_t(w, h);
 	s->set_current();
@@ -54,13 +54,10 @@ surface_ptr_t surface_t::create(uint32_t w, uint32_t h, texture_id_t &texture)
 	return surface_ptr_t(s);
 }
 
-surface_ptr_t surface_t::create_from_image(const char *path)
+surface_ptr_t surface_t::create(const string &&image_path)
 {
-	uint32_t w, h;
-	texture_id_t texture = image_t::create(path, w, h);
-	surface_ptr_t out = create(w, h, texture);
-	glDeleteTextures(1, &texture);
-	return out;
+	texture_ptr_t texture = image_t::create(image_path);
+	return create(texture->width(), texture->height(), texture);
 }
 
 surface_t& surface_t::fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
@@ -79,16 +76,16 @@ surface_t& surface_t::fill_rect(uint32_t color_rgba, uint32_t x, uint32_t y, uin
 	return *this;
 }
 
-surface_t& surface_t::blit(surface_ptr_t &surface, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+surface_t& surface_t::blit(const surface_ptr_t &surface, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
-	if (!w) w = surface->width();
-	if (!h) h = surface->width();
-
-	return blit(surface->get_texture()->get_id(), x, y, w, h);
+	return blit(surface->texture(), x, y, w, h);
 }
 
-surface_t &surface_t::blit(texture_id_t texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+surface_t &surface_t::blit(const texture_ptr_t &texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
+	if (!w) w = texture->width();
+	if (!h) h = texture->height();
+
 	set_current();
 	blitting_t tex(_width, _height);
 	tex.draw(texture, x, y, w, h);
@@ -99,7 +96,7 @@ surface_t &surface_t::blit(texture_id_t texture, uint32_t x, uint32_t y, uint32_
 surface_t& surface_t::set_current()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
-	glBindTexture(GL_TEXTURE_2D, _texture->get_id());
+	glBindTexture(GL_TEXTURE_2D, _texture->id());
 
 	glViewport(0, 0, _width, _height);
 

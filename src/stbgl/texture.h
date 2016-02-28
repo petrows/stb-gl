@@ -17,7 +17,10 @@ public:
 
 	static texture_ptr_t create(std::uint32_t w, std::uint32_t h, const texture_id_t texture = 0);
 
-	GLuint get_id() { return _id; }
+	texture_id_t id() { return _id; }
+
+	std::uint32_t width() { return _width; }
+	std::uint32_t height() { return _height; }
 
 	// Disable copy
 	texture_t(const texture_t&) = delete;

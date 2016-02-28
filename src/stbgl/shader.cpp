@@ -1,6 +1,8 @@
 #include "shader.h"
+#include "exception.h"
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 using namespace stbgl;
@@ -14,19 +16,16 @@ shader_id_t shader_t::load_shader_data(const char *data, int type)
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 	if(!compiled)
 	{
-		GLint infoLen = 0;
-		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
-		if(infoLen > 1)
-		{
-			char *infoLog = new char[(sizeof(char) * infoLen)];
-			glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
-			cerr << "Error compiling shader: " << infoLog << endl;
-			delete[] infoLog;
-		} else {
-			cerr << "Unknown error compiling shader" << endl;
+		GLint info_len = 0;
+		vector<char> info_message;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &info_len);
+		if(info_len > 1)
+		{			
+			info_message.resize(info_len + 1, 0x00);
+			glGetShaderInfoLog(shader, info_len, NULL, &(info_message[0]));
 		}
 		glDeleteShader(shader);
-		return 0;
+		throw shader_error_t(string(info_message.begin(), info_message.end()));
 	}
 	return shader;
 }

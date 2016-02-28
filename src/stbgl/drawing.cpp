@@ -1,4 +1,5 @@
 #include "drawing.h"
+#include "exception.h"
 #include "shader.h"
 #include "util.h"
 
@@ -68,22 +69,18 @@ bool drawing_t::prepare_shader()
 
 	if (0 == _shader_program)
 	{
-		cerr << "Error create shader program! Error " << glGetError() << endl;
-		return false;
+		throw shader_error_t("Error create shader program: " + glGetError());
 	}
-
 	_shader_attr_pos = glGetAttribLocation(_shader_program, "a_v4Position");
 	if (0 > _shader_attr_pos)
 	{
-		cerr << "Shader pos error!" << endl;
-		return false;
+		throw shader_error_t("Error create shader pos: " + glGetError());
 	}
 	_shader_attr_color = glGetAttribLocation(_shader_program, "a_v4FillColor");
 	if (0 > _shader_attr_color)
 	{
-		cerr << "Shader color error!" << endl;
-		return false;
+		throw shader_error_t("Error create shader color: " + glGetError());
 	}
-	cout << "Prepared sold draw program" << endl;
+
 	return true;
 }

@@ -24,7 +24,7 @@ blitting_t::blitting_t(uint32_t width, uint32_t height)
 	}
 }
 
-void blitting_t::draw(texture_id_t texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+void blitting_t::draw(const texture_ptr_t &texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
 {
 	glEnable(GL_BLEND);
 	glUseProgram(_shader_program);
@@ -32,7 +32,7 @@ void blitting_t::draw(texture_id_t texture, uint32_t x, uint32_t y, uint32_t w, 
 
 	glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, texture->id());
 	glUniform1i(_shader_tex_uniform, 0);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -74,27 +74,25 @@ bool blitting_t::prepare_shader()
 
 	if (0 == _shader_program)
 	{
-		cerr << "Error create shader program! Error " << glGetError() << endl;
-		return false;
+		throw shader_error_t("Error create shader program: " + glGetError());
 	}
 
 	_shader_attr_pos = glGetAttribLocation(_shader_program, "a_v4Position");
 	if (0 > _shader_attr_pos)
 	{
-		cerr << "shader pos error!" << endl;
-		return false;
+		throw shader_error_t("Error create shader pos: " + glGetError());
 	}
 	_shader_tex_pos =glGetAttribLocation (_shader_program, "a_v2TextCoord");
 	if (0 > _shader_tex_pos)
 	{
 		cerr << "Tex pos error!" << endl;
-		return false;
+		throw shader_error_t("Error create shader texture pos: " + glGetError());
 	}
 	_shader_tex_uniform = glGetUniformLocation(_shader_program, "Texture");
 	if (0 > _shader_tex_uniform)
 	{
 		cout << "img_texture_uniform error!" << endl;
-		return false;
+		throw shader_error_t("Error create shader uniform: " + glGetError());
 	}
 
 	return true;
