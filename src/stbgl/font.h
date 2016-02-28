@@ -2,6 +2,11 @@
 #define STBGL_FONT_T_H
 
 #include "global.h"
+#include "surface.h"
+
+#include <freetype2/ft2build.h>
+#include <freetype2/ftstroke.h>
+#include FT_FREETYPE_H
 
 namespace stbgl {
 
@@ -17,13 +22,27 @@ public:
 	void draw(const std::string &text_utf8, int x, int y);
 
 private:
+	unsigned int _size;
 
-	struct _glyth_t {
-		texture_id_t	_texture;
-		std::uint32_t	_key;
+	class _glyth_t
+	{
+	public:
+		FT_Int _bitmap_top; // offset
+		FT_Int _bitmap_left; // offset
+		FT_Int _bitmap_width;
+		FT_Int _bitmap_height;
+		FT_Vector _advance;
+
+		surface_ptr_t _surface;
+		_glyth_t (FT_GlyphSlot slot);
+
+		bool empty() {
+			return _bitmap_height == 0 || _bitmap_width == 0;
+		}
+
 	};
 
-	std::map< std::uint32_t, _glyth_t > _cache;
+	std::map< FT_ULong, _glyth_t > _cache;
 };
 
 }
