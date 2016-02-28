@@ -30,6 +30,9 @@ public:
 
 	uint32_t width() { return _width; }
 	uint32_t height() { return _height; }
+
+	// Disable copy
+	surface_t(const surface_t&) = delete;
 private:
 	const uint32_t _width, _height;
 	GLuint _framebuffer;
