@@ -10,8 +10,7 @@ class blitting_t
 {
 public:
 	blitting_t(uint32_t width, uint32_t height);
-
-	void draw(GLuint texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
+	void draw(texture_id_t texture, uint32_t x, uint32_t y, uint32_t w, uint32_t h);
 
 	static GLuint load_file_to_texture(const char *path) { uint32_t w, h; return load_file_to_texture(path, w, h); }
 	static GLuint load_file_to_texture(const char *path, uint32_t &w, uint32_t &h);

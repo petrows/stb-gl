@@ -1,8 +1,9 @@
 #include "image.h"
 
+using namespace std;
 using namespace stbgl;
 
-GLuint image_t::create_texture(const char *path)
+texture_id_t image_t::create_texture(const string &path)
 {
 
 }

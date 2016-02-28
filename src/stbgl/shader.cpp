@@ -1,10 +1,11 @@
 #include "shader.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 using namespace stbgl;
 
-GLuint shader_t::load_shader_data(const char *data, int type)
+shader_id_t shader_t::load_shader_data(const char *data, int type)
 {
 	GLuint shader = glCreateShader(type);
 	GLint compiled = 0;
@@ -30,9 +31,13 @@ GLuint shader_t::load_shader_data(const char *data, int type)
 	return shader;
 }
 
-GLuint shader_t::load_shader_file(const char *filename, int type)
+shader_id_t shader_t::load_shader_file(const char *filename, int type)
 {
+	ifstream shader_file(filename);
 
+	string shader_data((istreambuf_iterator<char>(shader_file)), istreambuf_iterator<char>());
+
+	return load_shader_data(shader_data.c_str(), type);
 }
 
 const char *shader_t::get_solid_frag()

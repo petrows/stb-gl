@@ -11,7 +11,7 @@ typedef std::shared_ptr<texture_t> texture_ptr_t;
 class texture_t
 {
 protected:
-	texture_t(uint32_t w, uint32_t h, GLuint texture);
+	texture_t(uint32_t w, uint32_t h, texture_id_t texture);
 public:
 	~texture_t();
 

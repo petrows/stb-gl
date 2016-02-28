@@ -9,7 +9,7 @@ namespace stbgl {
 class image_t
 {
 public:
-	static GLuint create_texture(const char *path);
+	static texture_id_t create_texture(const std::string &path);
 private:
 	image_t() {}
 };

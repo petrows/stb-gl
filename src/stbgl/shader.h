@@ -10,8 +10,8 @@ class shader_t
 private:
 	shader_t() {}
 public:
-	static GLuint load_shader_data(const char *data, int type);
-	static GLuint load_shader_file(const char *filename, int type);
+	static shader_id_t load_shader_data(const char *data, int type);
+	static shader_id_t load_shader_file(const char *filename, int type);
 
 	static const char * get_solid_frag();
 	static const char * get_solid_vert();
