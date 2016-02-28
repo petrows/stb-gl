@@ -18,8 +18,8 @@ class image_t
 public:
 	image_t() = delete; // No constructor
 
-	static texture_id_t create_texture(const std::string &path, std::uint32_t &w, std::uint32_t &h);
-	static texture_id_t create_texture(const uint8_t *data, size_t size, std::uint32_t &w, std::uint32_t &h);
+	static texture_id_t create(const std::string &path, std::uint32_t &w, std::uint32_t &h);
+	static texture_id_t create(const uint8_t *data, size_t size, std::uint32_t &w, std::uint32_t &h);
 
 	static bool detect_image_png(const std::uint8_t *data, const std::size_t size);
 	static bool detect_image_jpg(const std::uint8_t *data, const std::size_t size);

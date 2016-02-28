@@ -41,7 +41,8 @@ bool Application::init(int argc, char **argv)
 
 	_test_surface_3 = surface_t::create_from_image("b2.png");
 
-	_bg_texture = blitting_t::load_file_to_texture("bg.png");
+	//uint32_t w, h;
+	//_bg_texture = image_t::create("bg.png", w, h);
 
 	return true;
 }
@@ -92,14 +93,14 @@ void Application::draw()
 		draw.draw_rectangle(x, 0, 1, UI_H);
 	}
 
-	tex.draw(_test_surface_2->get_texture(), 150, 150, _test_surface_2->width(), _test_surface_2->height());
+	tex.draw(_test_surface_2->get_texture()->get_id(), 150, 150, _test_surface_2->width(), _test_surface_2->height());
 
 	//util_t::set_clip_rect(SCREEN_W, SCREEN_H, 100, 100, 400, 400);
 
-	tex.draw(_test_surface_1->get_texture(), 300, 300, 500, 500);
+	tex.draw(_test_surface_1->get_texture()->get_id(), 300, 300, 500, 500);
 
 
-	tex.draw(_test_surface_3->get_texture(), 768, 200, _test_surface_3->width(), _test_surface_3->height());
+	tex.draw(_test_surface_3->get_texture()->get_id(), 768, 200, _test_surface_3->width(), _test_surface_3->height());
 	//util_t::reset_clip_rect();
 
 	draw.set_color(color_t(0xFF00FF33));
@@ -113,7 +114,7 @@ void Application::draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	blitting_t draw_main(SCREEN_W, SCREEN_H);
-	draw_main.draw(_ui_surface->get_texture(), 0, 0, SCREEN_W, SCREEN_H);
+	draw_main.draw(_ui_surface->get_texture()->get_id(), 0, 0, SCREEN_W, SCREEN_H);
 
 	//Draw order
 	glutSwapBuffers();

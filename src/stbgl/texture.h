@@ -15,14 +15,14 @@ protected:
 public:
 	~texture_t();
 
-	texture_ptr_t create_from_image(const char *path);
+	static texture_ptr_t create(std::uint32_t w, std::uint32_t h, const texture_id_t texture = 0);
 
 	GLuint get_id() { return _id; }
 
 	// Disable copy
 	texture_t(const texture_t&) = delete;
 private:
-	const texture_id_t _id;
+	texture_id_t _id;
 	const std::uint32_t _width, _height;
 };
 

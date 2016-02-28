@@ -7,7 +7,7 @@
 using namespace std;
 using namespace stbgl;
 
-texture_id_t image_t::create_texture(const string &path, uint32_t &w, uint32_t &h)
+texture_id_t image_t::create(const string &path, uint32_t &w, uint32_t &h)
 {
 	ifstream in_file(path, std::ios::binary);
 
@@ -27,10 +27,10 @@ texture_id_t image_t::create_texture(const string &path, uint32_t &w, uint32_t &
 	// read the data:
 	data.assign(istream_iterator<uint8_t>(in_file), istream_iterator<uint8_t>());
 
-	return create_texture(data.data(), data.size(), w, h);
+	return create(data.data(), data.size(), w, h);
 }
 
-texture_id_t image_t::create_texture(const uint8_t *data, size_t size, uint32_t &w, uint32_t &h)
+texture_id_t image_t::create(const uint8_t *data, size_t size, uint32_t &w, uint32_t &h)
 {
 	// Try to detect file type now
 #if defined(STBGL_ENABLE_PNG)
