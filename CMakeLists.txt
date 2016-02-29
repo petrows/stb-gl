@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.8)
  
-set(PROJECT "opengl-hal")
+set(PROJECT "stb-gl")
 project(${PROJECT})
 
 file (GLOB_RECURSE HAL_SRC "src/stbgl/*.c*")

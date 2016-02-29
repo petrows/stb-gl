@@ -8,6 +8,16 @@ using namespace stbgl;
 
 Application *Application::_instance = NULL;
 
+void Application::set_screen(uint32_t w, uint32_t h)
+{
+	_screen_w = w;
+	_screen_h = h;
+}
+
+Application::Application()
+	: _screen_w(1024), _screen_h(768)
+{}
+
 bool Application::init()
 {
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
@@ -91,13 +101,13 @@ void Application::draw()
 	// draw.draw_rectangle(100, 100, 500, 500);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, SCREEN_W, SCREEN_H);
+	glViewport(0, 0, screen_width(), screen_height());
 
 	//Background color
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	blitting_t draw_main(SCREEN_W, SCREEN_H);
-	draw_main.draw(_ui_surface, 0, 0, SCREEN_W, SCREEN_H);
+	blitting_t draw_main(screen_width(), screen_height());
+	draw_main.draw(_ui_surface, 0, 0, screen_width(), screen_height());
 }
 

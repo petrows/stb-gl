@@ -14,17 +14,22 @@ public:
 		return _instance;
 	}
 
+	void set_screen(std::uint32_t w, std::uint32_t h);
+	std::uint32_t screen_width() { return _screen_w; }
+	std::uint32_t screen_height() { return _screen_h; }
+
 public:
-	const static std::uint32_t SCREEN_W = 1920;
-	const static std::uint32_t SCREEN_H = 1080;
 
-	const static std::uint32_t UI_W = 1280;
-	const static std::uint32_t UI_H = 720;
+	const static std::uint32_t UI_W = 1024;
+	const static std::uint32_t UI_H = 768;
 
-	Application() {}
+	Application();
 	bool init();
 	void draw();
 private:
+	std::uint32_t _screen_w;
+	std::uint32_t _screen_h;
+
 	stbgl::surface_ptr_t _ui_surface;
 
 	stbgl::surface_ptr_t _test_surface_1;

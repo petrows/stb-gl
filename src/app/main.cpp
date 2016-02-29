@@ -25,6 +25,12 @@ void opengl_on_draw()
 	glutSwapBuffers();
 }
 
+void opengl_on_resize(int width, int height)
+{
+	Application::getInstance()->set_screen(width, height);
+	std::cout << "Resize to " << width << "x" << height << std::endl;
+}
+
 //Main program
 int main(int argc, char **argv)
 {
@@ -34,7 +40,7 @@ int main(int argc, char **argv)
 	//Simple buffer
 	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA);
 	// glutInitWindowPosition(150, 125);
-	glutInitWindowSize(Application::SCREEN_W, Application::SCREEN_H);
+	glutInitWindowSize(Application::getInstance()->screen_width(), Application::getInstance()->screen_height());
 	glutCreateWindow("OpenGL");
 
 	if (!Application::getInstance()->init())
@@ -42,6 +48,7 @@ int main(int argc, char **argv)
 
 	glutTimerFunc(10, &opengl_on_timer, 1);
 	glutDisplayFunc(&opengl_on_draw);
+	glutReshapeFunc(&opengl_on_resize);
 	glutMainLoop();
 
 	return 0;
