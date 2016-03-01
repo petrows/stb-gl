@@ -3,6 +3,11 @@
 #include <string>
 #include <GLES2/gl2.h>
 
+#include <stbgl/exception.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 using namespace std;
 using namespace stbgl;
 
@@ -71,6 +76,46 @@ bool Application::init()
 	//_test_surface_3 = surface_t::create("b2.png");
 
 	// _bg_texture = image_t::create("bg.png");
+
+	FT_Library ft;
+	if (FT_Init_FreeType(&ft))
+		throw stbgl::exception_t("ERROR::FREETYPE: Could not init FreeType Library");
+
+	FT_Face face;
+	if (FT_New_Face(ft, "liberation-sans.ttf", 0, &face))
+		throw stbgl::exception_t("ERROR::FREETYPE: Failed to load font");
+
+	FT_Set_Pixel_Sizes(face, 0, 128);
+
+	if (FT_Load_Char(face, 'y', FT_LOAD_RENDER))
+		throw stbgl::exception_t("ERROR::FREETYTPE: Failed to load Glyph");
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
+
+	GLuint _font_texture;
+	glGenTextures(1, &_font_texture);
+	glBindTexture(GL_TEXTURE_2D, _font_texture);
+	glTexImage2D(
+		GL_TEXTURE_2D,
+		0,
+		GL_ALPHA,
+		face->glyph->bitmap.width,
+		face->glyph->bitmap.rows,
+		0,
+		GL_ALPHA,
+		GL_UNSIGNED_BYTE,
+		face->glyph->bitmap.buffer
+	);
+	// Set texture options
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	texture_ptr_t font_tex = texture_t::create(face->glyph->bitmap.width, face->glyph->bitmap.rows, _font_texture);
+
+	glBlendFuncSeparate(GL_ZERO, GL_ONE, GL_ONE, GL_ZERO);
+	_ui_surface->blit(font_tex, 0, 0);
 
 	return true;
 }
