@@ -113,6 +113,7 @@ bool Application::init()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	texture_ptr_t font_tex = texture_t::create(face->glyph->bitmap.width, face->glyph->bitmap.rows, _font_texture);
+	font_tex->set_pixels(face->glyph->bitmap.buffer);
 
 	glBlendFuncSeparate(GL_ZERO, GL_ONE, GL_ONE, GL_ZERO);
 	_ui_surface->blit(font_tex, 0, 0);

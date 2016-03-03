@@ -3,6 +3,7 @@
 #include "exception.h"
 
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 using namespace stbgl;
@@ -40,18 +41,47 @@ texture_ptr_t texture_t::create(unsigned int w, unsigned int h, const texture_id
 
 void texture_t::get_pixels(buffer_t &data)
 {
-	data.resize(_width *_height * 4);
+	size_t row_width = _width * 4; // We use RGBA
+	buffer_t data_flip;
+	data.resize(row_width *_height);
+	data_flip.resize(row_width *_height);
 	glBindTexture(GL_TEXTURE_2D, _id);
-	glReadPixels(0, 0, _width, _height, GL_RGBA, GL_UNSIGNED_BYTE, static_cast<GLubyte*>(&(data[0])));
+	glReadPixels(0, 0, _width, _height, GL_RGBA, GL_UNSIGNED_BYTE, static_cast<GLubyte*>(&(data_flip[0])));
+
+	// Copy flipped in-memory data to make pixels order from top-to-bottom
+	for (size_t y=0; y<_height; y++)
+	{
+		// Copy inverted data
+		std::memcpy(&(data[y * row_width]), &(data_flip[(_height - y - 1) * row_width]), row_width);
+	}
 }
 
-void texture_t::set_pixels(buffer_t &data)
+void texture_t::set_pixels(const buffer_t &data)
 {
 	if (data.size() < (_width *_height * 4))
 	{
 		throw texture_error_t("set_pixels: cant set pixel buffer with size < w*h*8");
 	}
 
+	set_pixels(&(data[0]));
+}
+
+void texture_t::set_pixels(const uint8_t *data)
+{
+	size_t row_width = _width * 4; // We use RGBA
+	buffer_t data_flip;
+	data_flip.resize(row_width *_height);
+
+	// Copy flipped in-memory data to make pixels order from top-to-bottom
+	for (size_t y=0; y<_height; y++)
+	{
+		// Copy inverted data
+		std::memcpy(
+				&(data_flip[y * row_width]),
+				&data[(_height - y - 1) * row_width],
+				row_width);
+	}
+
 	glBindTexture(GL_TEXTURE_2D, _id);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, static_cast<GLubyte*>(&(data[0])));
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, static_cast<GLubyte*>(&(data_flip[0])));
 }

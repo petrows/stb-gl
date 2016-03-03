@@ -18,7 +18,8 @@ public:
 	static texture_ptr_t create(unsigned int w, unsigned int h, const texture_id_t texture = 0);
 
 	void get_pixels(buffer_t &data);
-	void set_pixels(buffer_t &data);
+	void set_pixels(const buffer_t &data);
+	void set_pixels(const std::uint8_t *data);
 
 	texture_id_t id() { return _id; }
 
