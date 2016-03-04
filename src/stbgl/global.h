@@ -19,12 +19,11 @@ namespace stbgl {
 
 typedef std::vector<std::uint8_t> buffer_t;
 
-typedef GLuint	shader_id_t;
-typedef GLuint	shader_program_id_t;
-typedef GLint	shader_attrib_id_t;
-typedef GLuint	texture_id_t;
-typedef GLuint	framebuffer_id_t;
-
+typedef GLuint shader_id_t;
+typedef GLuint shader_program_id_t;
+typedef GLint shader_attrib_id_t;
+typedef GLuint texture_id_t;
+typedef GLuint framebuffer_id_t;
 }
 
 #endif // STBGL_GLOBAL_H

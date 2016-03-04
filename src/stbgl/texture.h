@@ -8,10 +8,10 @@ namespace stbgl {
 class texture_t;
 typedef std::shared_ptr<texture_t> texture_ptr_t;
 
-class texture_t
-{
+class texture_t {
 protected:
 	texture_t(unsigned int w, unsigned int h, texture_id_t texture);
+
 public:
 	~texture_t();
 
@@ -27,12 +27,12 @@ public:
 	unsigned int height() { return _height; }
 
 	// Disable copy
-	texture_t(const texture_t&) = delete;
+	texture_t(const texture_t &) = delete;
+
 private:
 	texture_id_t _id;
 	const unsigned int _width, _height;
 };
-
 }
 
 #endif // TEXTURE_T_H

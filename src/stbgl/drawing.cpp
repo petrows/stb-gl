@@ -9,26 +9,21 @@ using namespace std;
 using namespace stbgl;
 
 shader_program_id_t drawing_t::_shader_program = 0;
-shader_attrib_id_t  drawing_t::_shader_attr_pos = 0;
-shader_attrib_id_t  drawing_t::_shader_attr_color = 0;
+shader_attrib_id_t drawing_t::_shader_attr_pos = 0;
+shader_attrib_id_t drawing_t::_shader_attr_color = 0;
 
-drawing_t::drawing_t(unsigned int width, unsigned int height)
-	: _w(width), _h(height)
-{
-	if (0 == _shader_program)
-	{
+drawing_t::drawing_t(unsigned int width, unsigned int height) : _w(width), _h(height) {
+	if (0 == _shader_program) {
 		prepare_shader();
 	}
 }
 
-void drawing_t::clear(const color_t &color)
-{
+void drawing_t::clear(const color_t &color) {
 	set_color(color);
 	draw_rectangle(0, 0, _w, _h);
 }
 
-void drawing_t::draw_rectangle(int x, int y, unsigned int w, unsigned int h)
-{
+void drawing_t::draw_rectangle(int x, int y, unsigned int w, unsigned int h) {
 	glEnable(GL_BLEND);
 	glUseProgram(_shader_program);
 	glViewport(0, 0, _w, _h);
@@ -37,12 +32,8 @@ void drawing_t::draw_rectangle(int x, int y, unsigned int w, unsigned int h)
 	float triangleVertices[12];
 	util_t::coord_rect(_w, _h, x, y, w, h, triangleVertices);
 
-	const float triangleColors[] =
-	{
-		_color.r(), _color.g(), _color.b(), _color.a(),
-		_color.r(), _color.g(), _color.b(), _color.a(),
-		_color.r(), _color.g(), _color.b(), _color.a(),
-		_color.r(), _color.g(), _color.b(), _color.a(),
+	const float triangleColors[] = {
+		_color.r(), _color.g(), _color.b(), _color.a(), _color.r(), _color.g(), _color.b(), _color.a(), _color.r(), _color.g(), _color.b(), _color.a(), _color.r(), _color.g(), _color.b(), _color.a(),
 	};
 
 	glEnableVertexAttribArray(0);
@@ -56,29 +47,25 @@ void drawing_t::draw_rectangle(int x, int y, unsigned int w, unsigned int h)
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-bool drawing_t::prepare_shader()
-{
+bool drawing_t::prepare_shader() {
 	_shader_program = glCreateProgram();
 
 	_shader_fragment = shader_t::load_shader_data(shader_t::get_solid_frag(), GL_FRAGMENT_SHADER);
-	_shader_vertex   = shader_t::load_shader_data(shader_t::get_solid_vert(), GL_VERTEX_SHADER);
+	_shader_vertex = shader_t::load_shader_data(shader_t::get_solid_vert(), GL_VERTEX_SHADER);
 
 	glAttachShader(_shader_program, _shader_fragment);
 	glAttachShader(_shader_program, _shader_vertex);
 	glLinkProgram(_shader_program);
 
-	if (0 == _shader_program)
-	{
+	if (0 == _shader_program) {
 		throw shader_error_t("Error create shader program: " + glGetError());
 	}
 	_shader_attr_pos = glGetAttribLocation(_shader_program, "a_v4Position");
-	if (0 > _shader_attr_pos)
-	{
+	if (0 > _shader_attr_pos) {
 		throw shader_error_t("Error create shader pos: " + glGetError());
 	}
 	_shader_attr_color = glGetAttribLocation(_shader_program, "a_v4FillColor");
-	if (0 > _shader_attr_color)
-	{
+	if (0 > _shader_attr_color) {
 		throw shader_error_t("Error create shader color: " + glGetError());
 	}
 
