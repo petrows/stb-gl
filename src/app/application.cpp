@@ -102,6 +102,7 @@ bool Application::init() {
 	_font->draw(_ui_surface, 't', 10, 10);
 	_font->draw(_ui_surface, 'h', 20, 10);
 	_font->draw(_ui_surface, 'e', 30, 10);
+	_font->draw(_ui_surface, std::string("Пофигу"), 50, 10);
 
 	return true;
 }
