@@ -1,0 +1,8 @@
+BasedOnStyle: LLVM
+Standard: Cpp03
+TabWidth: 4
+IndentWidth: 4
+UseTab: Always
+ColumnLimit: 1024
+AccessModifierOffset: -4
+AllowShortBlocksOnASingleLine: true

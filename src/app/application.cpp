@@ -23,7 +23,7 @@ Application::Application() : _screen_w(1024), _screen_h(768) {}
 bool Application::init() {
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-	_font = font_t::create("font.ttf", 20);
+
 
 	_ui_surface = surface_t::create(UI_W, UI_H);
 	_ui_surface->clear(0x00000000);
@@ -69,17 +69,14 @@ bool Application::init() {
 
 	// _bg_texture = image_t::create("bg.png");
 
+	/*
 	FT_Library ft;
 	if (FT_Init_FreeType(&ft))
 		throw stbgl::exception_t("ERROR::FREETYPE: Could not init FreeType Library");
 
-	FT_Face face;
-	if (FT_New_Face(ft, "liberation-sans.ttf", 0, &face))
-		throw stbgl::exception_t("ERROR::FREETYPE: Failed to load font");
 
-	FT_Set_Pixel_Sizes(face, 0, 128);
 
-	if (FT_Load_Char(face, 'x', FT_LOAD_RENDER))
+	if (FT_Load_Char(face, 'y', FT_LOAD_RENDER))
 		throw stbgl::exception_t("ERROR::FREETYTPE: Failed to load Glyph");
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
@@ -98,7 +95,13 @@ bool Application::init() {
 	// font_tex->set_pixels(face->glyph->bitmap.buffer);
 
 	glBlendFuncSeparate(GL_ZERO, GL_ONE, GL_ONE, GL_ZERO);
-	_ui_surface->blit(font_tex, 0, 0);
+	_ui_surface->blit(font_tex, 0, 0);*/
+
+	_font = font_t::create("liberation-sans.ttf", 20);
+	_ui_surface->set_current();
+	_font->draw(_ui_surface, 't', 10, 10);
+	_font->draw(_ui_surface, 'h', 20, 10);
+	_font->draw(_ui_surface, 'e', 30, 10);
 
 	return true;
 }

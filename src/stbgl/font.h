@@ -20,9 +20,12 @@ private:
 public:
 	static font_ptr_t create(const std::string &path, unsigned int size);
 	void draw(const std::string &text_utf8, int x, int y);
+	void draw(surface_ptr_t surface, const std::uint32_t char_utf8, int x, int y);
 
 private:
 	unsigned int _size;
+	color_t _color;
+	FT_Face _ft_face;
 
 	class _glyth_t {
 	public:
@@ -42,8 +45,7 @@ private:
 
 	bool prepare_shader();
 
-	shader_id_t _shader_fragment;
-	shader_id_t _shader_vertex;
+	static FT_Library _ft;
 
 	static shader_program_id_t _shader_program;
 	static shader_attrib_id_t _shader_attr_pos;
