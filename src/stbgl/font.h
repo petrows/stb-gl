@@ -27,7 +27,6 @@ public:
 	void set_color(const color_t &color) { _color = color; }
 
 private:
-
 	_glyth_t *render(std::uint32_t char_utf8);
 
 	unsigned int _size;
@@ -49,7 +48,7 @@ private:
 		bool empty() { return _bitmap_height == 0 || _bitmap_width == 0; }
 	};
 
-	std::map<FT_ULong, _glyth_t*> _cache;
+	std::map<FT_ULong, _glyth_t *> _cache;
 
 	bool prepare_shader();
 

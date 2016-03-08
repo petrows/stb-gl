@@ -23,8 +23,6 @@ Application::Application() : _screen_w(1024), _screen_h(768) {}
 bool Application::init() {
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-
-
 	_ui_surface = surface_t::create(UI_W, UI_H);
 	_ui_surface->clear(0x00000000);
 

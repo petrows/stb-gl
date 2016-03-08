@@ -27,15 +27,14 @@ font_t::font_t(const string &path, unsigned int size) : _size(size) {
 
 font_ptr_t font_t::create(const string &path, unsigned int size) { return font_ptr_t(new font_t(path, size)); }
 
-void font_t::draw(surface_ptr_t surface, const string &text_utf8, int x, int y)
-{
-	if (!utf8::is_valid (text_utf8.begin(), text_utf8.end()))
+void font_t::draw(surface_ptr_t surface, const string &text_utf8, int x, int y) {
+	if (!utf8::is_valid(text_utf8.begin(), text_utf8.end()))
 		throw font_error_t("splitText: text is invalid utf8");
 
 	string::const_iterator it = text_utf8.begin();
 	FT_ULong slot_id;
 	while (it != text_utf8.end()) {
-		slot_id = utf8::unchecked::next (it);
+		slot_id = utf8::unchecked::next(it);
 		_glyth_t *glyth = render(slot_id);
 		draw(surface, glyth, x, y);
 		cout << "Slot: " << slot_id << endl;
@@ -43,8 +42,7 @@ void font_t::draw(surface_ptr_t surface, const string &text_utf8, int x, int y)
 	}
 }
 
-void font_t::draw(surface_ptr_t surface, _glyth_t * glyth, int x, int y)
-{
+void font_t::draw(surface_ptr_t surface, _glyth_t *glyth, int x, int y) {
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glUseProgram(_shader_program);
@@ -54,10 +52,7 @@ void font_t::draw(surface_ptr_t surface, _glyth_t * glyth, int x, int y)
 	glUniform1i(_shader_tex_uniform, 0);
 
 	static const float texture_coords[] = {
-		1.0, 0.0,
-		1.0, 1.0,
-		0.0, 1.0,
-		0.0, 0.0,
+		1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
 	};
 
 	glVertexAttribPointer(_shader_tex_pos, 2, GL_FLOAT, GL_FALSE, 0, texture_coords);
@@ -82,12 +77,10 @@ void font_t::draw(surface_ptr_t surface, _glyth_t * glyth, int x, int y)
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-font_t::_glyth_t *font_t::render(uint32_t char_utf8)
-{
+font_t::_glyth_t *font_t::render(uint32_t char_utf8) {
 	// Cached?
 	auto cahe_it = _cache.find(char_utf8);
-	if (_cache.end() != cahe_it)
-	{
+	if (_cache.end() != cahe_it) {
 		cout << "Using cache for " << char_utf8 << endl;
 		return cahe_it->second;
 	}
@@ -100,7 +93,6 @@ font_t::_glyth_t *font_t::render(uint32_t char_utf8)
 	_cache[char_utf8] = glyth;
 
 	// Now remove old glyths from cache
-
 
 	return glyth;
 }
@@ -144,8 +136,7 @@ bool font_t::prepare_shader() {
 	return true;
 }
 
-font_t::_glyth_t::_glyth_t(FT_GlyphSlot slot)
-{
+font_t::_glyth_t::_glyth_t(FT_GlyphSlot slot) {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
 	glEnable(GL_BLEND);
@@ -163,12 +154,9 @@ font_t::_glyth_t::_glyth_t(FT_GlyphSlot slot)
 
 	_bitmap_width = slot->bitmap.width;
 	_bitmap_height = slot->bitmap.rows;
-	_bitmap_left = slot->metrics.horiBearingX/64;
-	_bitmap_top = slot->metrics.horiBearingY/64;
-	_advance = slot->metrics.horiAdvance/64;
+	_bitmap_left = slot->metrics.horiBearingX / 64;
+	_bitmap_top = slot->metrics.horiBearingY / 64;
+	_advance = slot->metrics.horiAdvance / 64;
 }
 
-font_t::_glyth_t::~_glyth_t()
-{
-	glDeleteTextures(1, &_texture);
-}
+font_t::_glyth_t::~_glyth_t() { glDeleteTextures(1, &_texture); }

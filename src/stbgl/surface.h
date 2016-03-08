@@ -50,7 +50,7 @@ private:
 	shader_id_t _shaderVertexSolid;
 	shader_id_t _shaderFragmentSolid;
 
-	shader_attrib_id_t _shaderAttrPos; // Quad vertex positions
+	shader_attrib_id_t _shaderAttrPos;   // Quad vertex positions
 	shader_attrib_id_t _shaderAttrColor; // Vertex fill color
 };
 }
