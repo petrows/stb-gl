@@ -60,7 +60,7 @@ void font_t::draw(surface_ptr_t surface, _glyth_t *glyth, int x, int y) {
 
 	// Draw surfaces
 	float triangleVertices[12];
-	util_t::coord_rect(surface->width(), surface->height(), x, y + _size - glyth->_bitmap_top, glyth->_bitmap_width, glyth->_bitmap_height, triangleVertices);
+	util_t::coord_rect(surface->width(), surface->height(), x + glyth->_bitmap_left, y + _size - glyth->_bitmap_top, glyth->_bitmap_width, glyth->_bitmap_height, triangleVertices);
 
 	glEnableVertexAttribArray(0);
 

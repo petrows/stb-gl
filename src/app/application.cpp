@@ -24,8 +24,9 @@ bool Application::init() {
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
 	_ui_surface = surface_t::create(UI_W, UI_H);
-	_ui_surface->clear(0x00000000);
+	_ui_surface->clear(0xFFFFFFFF);
 
+	/*
 	for (uint32_t y = 0; y < UI_H; y += 64) {
 		_ui_surface->fill_rect(color_t(0x66666699), 0, y, UI_W, 1);
 	}
@@ -51,10 +52,10 @@ bool Application::init() {
 		}
 	}
 	test_surface->memory_unlock(data);
-	//_ui_surface->blit(test_surface, 0, 0);
+	_ui_surface->blit(test_surface, 0, 0);
 
 	test_surface = surface_t::create("b2.png");
-
+	*/
 	//_ui_surface->blit(test_surface, 512, 100);
 
 	//_test_surface_2 = surface_t::create(512, 256);
@@ -95,10 +96,10 @@ bool Application::init() {
 	glBlendFuncSeparate(GL_ZERO, GL_ONE, GL_ONE, GL_ZERO);
 	_ui_surface->blit(font_tex, 0, 0);*/
 
-	_font = font_t::create("LiberationMono-Regular.ttf", 20);
-	_font->set_color(color_t(0xFF0000FF));
+	_font = font_t::create("LiberationMono-Regular.ttf", 18);
+	_font->set_color(color_t(0x000000FF));
 	_ui_surface->set_current();
-	_font->draw(_ui_surface, std::string("(FT_Load_Char(face, 'y', FT_LOAD_RENDER))"), 50, 10);
+	_font->draw(_ui_surface, std::string("Using some simple code-sorcery, we can also add text shadows, which makes small text several times more readable on pretty much any background."), 50, 10);
 	_font->draw(_ui_surface, std::string("Докучный шум столицы и двора"), 50, 30);
 	_font->draw(_ui_surface, std::string("И убежать в пустынные дубровы"), 50, 50);
 
