@@ -5,7 +5,7 @@
 #include "utf8/utf8.h"
 
 using namespace stbgl;
-// using namespace std;
+using namespace std;
 
 FT_Library font_t::_ft = nullptr;
 shader_program_id_t font_t::_shader_program = 0;
@@ -14,7 +14,7 @@ shader_attrib_id_t font_t::_shader_attr_color = 0;
 shader_attrib_id_t font_t::_shader_tex_uniform = 0;
 shader_attrib_id_t font_t::_shader_tex_pos = 0;
 
-font_t::font_t(const std::string &path, unsigned int size) : _size(size) {
+font_t::font_t(const string &path, unsigned int size) : _size(size) {
 	if (0 == _shader_program) {
 		prepare_shader();
 	}
@@ -25,43 +25,31 @@ font_t::font_t(const std::string &path, unsigned int size) : _size(size) {
 	FT_Set_Pixel_Sizes(_ft_face, 0, size);
 }
 
-font_ptr_t font_t::create(const std::string &path, unsigned int size) { return font_ptr_t(new font_t(path, size)); }
+font_ptr_t font_t::create(const string &path, unsigned int size) { return font_ptr_t(new font_t(path, size)); }
 
-void font_t::draw(surface_ptr_t surface, const std::string &text_utf8, int x, int y)
+void font_t::draw(surface_ptr_t surface, const string &text_utf8, int x, int y)
 {
 	if (!utf8::is_valid (text_utf8.begin(), text_utf8.end()))
 		throw font_error_t("splitText: text is invalid utf8");
 
-	std::string::const_iterator it = text_utf8.begin();
-	std::string::const_iterator from_it = it;
+	string::const_iterator it = text_utf8.begin();
 	FT_ULong slot_id;
-	FT_ULong slot_id_next;
-
 	while (it != text_utf8.end()) {
 		slot_id = utf8::unchecked::next (it);
-		// slot_id_next = utf8::unchecked::peek_next(it);
-
-		_glyth_t glyth = render(slot_id);
-
-		draw(surface, slot_id, x, y);
-
-		std::cout << "Slot: " << slot_id << std::endl;
-
-		x += glyth._advance;
+		_glyth_t *glyth = render(slot_id);
+		draw(surface, glyth, x, y);
+		cout << "Slot: " << slot_id << endl;
+		x += glyth->_advance;
 	}
 }
 
-void font_t::draw(surface_ptr_t surface, const uint32_t char_utf8, int x, int y)
+void font_t::draw(surface_ptr_t surface, _glyth_t * glyth, int x, int y)
 {
-	_color.set_color(0xFFFFFFFF);
-
-	_glyth_t glyth = render(char_utf8);
-
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glUseProgram(_shader_program);
 
-	glBindTexture(GL_TEXTURE_2D, glyth._texture);
+	glBindTexture(GL_TEXTURE_2D, glyth->_texture);
 
 	glUniform1i(_shader_tex_uniform, 0);
 
@@ -77,7 +65,7 @@ void font_t::draw(surface_ptr_t surface, const uint32_t char_utf8, int x, int y)
 
 	// Draw surfaces
 	float triangleVertices[12];
-	util_t::coord_rect(surface->width(), surface->height(), x, _size + y - glyth._bitmap_top, glyth._bitmap_width, glyth._bitmap_height, triangleVertices);
+	util_t::coord_rect(surface->width(), surface->height(), x, y + _size - glyth->_bitmap_top, glyth->_bitmap_width, glyth->_bitmap_height, triangleVertices);
 
 	glEnableVertexAttribArray(0);
 
@@ -94,12 +82,27 @@ void font_t::draw(surface_ptr_t surface, const uint32_t char_utf8, int x, int y)
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
-font_t::_glyth_t font_t::render(uint32_t char_utf8)
+font_t::_glyth_t *font_t::render(uint32_t char_utf8)
 {
+	// Cached?
+	auto cahe_it = _cache.find(char_utf8);
+	if (_cache.end() != cahe_it)
+	{
+		cout << "Using cache for " << char_utf8 << endl;
+		return cahe_it->second;
+	}
+
 	if (FT_Load_Char(_ft_face, char_utf8, FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT))
 		throw font_error_t("Failed to load Glyph");
 
-	return _glyth_t(_ft_face->glyph);
+	_glyth_t *glyth = new _glyth_t(_ft_face->glyph);
+
+	_cache[char_utf8] = glyth;
+
+	// Now remove old glyths from cache
+
+
+	return glyth;
 }
 
 bool font_t::prepare_shader() {
@@ -163,4 +166,9 @@ font_t::_glyth_t::_glyth_t(FT_GlyphSlot slot)
 	_bitmap_left = slot->metrics.horiBearingX/64;
 	_bitmap_top = slot->metrics.horiBearingY/64;
 	_advance = slot->metrics.horiAdvance/64;
+}
+
+font_t::_glyth_t::~_glyth_t()
+{
+	glDeleteTextures(1, &_texture);
 }

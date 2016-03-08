@@ -22,11 +22,13 @@ private:
 public:
 	static font_ptr_t create(const std::string &path, unsigned int size);
 	void draw(surface_ptr_t surface, const std::string &text_utf8, int x, int y);
-	void draw(surface_ptr_t surface, const std::uint32_t char_utf8, int x, int y);
+	void draw(surface_ptr_t surface, _glyth_t *glyth, int x, int y);
+
+	void set_color(const color_t &color) { _color = color; }
 
 private:
 
-	_glyth_t render(std::uint32_t char_utf8);
+	_glyth_t *render(std::uint32_t char_utf8);
 
 	unsigned int _size;
 	color_t _color;
@@ -42,11 +44,12 @@ private:
 
 		texture_id_t _texture;
 		_glyth_t(FT_GlyphSlot slot);
+		~_glyth_t();
 
 		bool empty() { return _bitmap_height == 0 || _bitmap_width == 0; }
 	};
 
-	std::map<FT_ULong, _glyth_t> _cache;
+	std::map<FT_ULong, _glyth_t*> _cache;
 
 	bool prepare_shader();
 

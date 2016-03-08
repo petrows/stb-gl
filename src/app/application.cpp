@@ -53,11 +53,11 @@ bool Application::init() {
 		}
 	}
 	test_surface->memory_unlock(data);
-	_ui_surface->blit(test_surface, 0, 0);
+	//_ui_surface->blit(test_surface, 0, 0);
 
 	test_surface = surface_t::create("b2.png");
 
-	_ui_surface->blit(test_surface, 512, 100);
+	//_ui_surface->blit(test_surface, 512, 100);
 
 	//_test_surface_2 = surface_t::create(512, 256);
 	//_test_surface_2->clear(0xFF00FF33);
@@ -98,11 +98,11 @@ bool Application::init() {
 	_ui_surface->blit(font_tex, 0, 0);*/
 
 	_font = font_t::create("liberation-sans.ttf", 20);
+	_font->set_color(color_t(0xFF0000FF));
 	_ui_surface->set_current();
-	_font->draw(_ui_surface, 't', 10, 10);
-	_font->draw(_ui_surface, 'h', 20, 10);
-	_font->draw(_ui_surface, 'e', 30, 10);
-	_font->draw(_ui_surface, std::string("Пофигу"), 50, 10);
+	_font->draw(_ui_surface, std::string("КАК СЧАСТЛИВ Я, КОГДА МОГУ ПОКИНУТЬ"), 50, 10);
+	_font->draw(_ui_surface, std::string("Докучный шум столицы и двора"), 50, 30);
+	_font->draw(_ui_surface, std::string("И убежать в пустынные дубровы"), 50, 50);
 
 	return true;
 }
