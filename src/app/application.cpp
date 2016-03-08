@@ -95,10 +95,10 @@ bool Application::init() {
 	glBlendFuncSeparate(GL_ZERO, GL_ONE, GL_ONE, GL_ZERO);
 	_ui_surface->blit(font_tex, 0, 0);*/
 
-	_font = font_t::create("liberation-sans.ttf", 20);
+	_font = font_t::create("LiberationMono-Regular.ttf", 20);
 	_font->set_color(color_t(0xFF0000FF));
 	_ui_surface->set_current();
-	_font->draw(_ui_surface, std::string("КАК СЧАСТЛИВ Я, КОГДА МОГУ ПОКИНУТЬ"), 50, 10);
+	_font->draw(_ui_surface, std::string("(FT_Load_Char(face, 'y', FT_LOAD_RENDER))"), 50, 10);
 	_font->draw(_ui_surface, std::string("Докучный шум столицы и двора"), 50, 30);
 	_font->draw(_ui_surface, std::string("И убежать в пустынные дубровы"), 50, 50);
 

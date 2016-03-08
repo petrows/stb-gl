@@ -1,5 +1,6 @@
 #include "image.h"
 
+#include <cstring>
 #include <iterator>
 #include <fstream>
 #include <vector>
@@ -133,7 +134,7 @@ texture_id_t image_t::png_reader_t::load_png(const uint8_t *data, const size_t s
 		break;
 	case PNG_COLOR_TYPE_GRAY:
 		if (_bit_depth < 8) {
-			png_set_gray_1_2_4_to_8(_png_ptr);
+			png_set_expand_gray_1_2_4_to_8(_png_ptr);
 			_bit_depth = 8;
 		}
 		png_set_gray_to_rgb(_png_ptr);
@@ -141,7 +142,7 @@ texture_id_t image_t::png_reader_t::load_png(const uint8_t *data, const size_t s
 		break;
 	case PNG_COLOR_TYPE_GRAY_ALPHA:
 		if (_bit_depth < 8) {
-			png_set_gray_1_2_4_to_8(_png_ptr);
+			png_set_expand_gray_1_2_4_to_8(_png_ptr);
 			_bit_depth = 8;
 		}
 		png_set_gray_to_rgb(_png_ptr);
