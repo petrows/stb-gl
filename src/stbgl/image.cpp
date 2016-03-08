@@ -100,7 +100,7 @@ image_t::png_reader_t::png_reader_t() {
 	_info_ptr = png_create_info_struct(_png_ptr);
 }
 
-image_t::png_reader_t::~png_reader_t() { png_destroy_read_struct(&_png_ptr, &_info_ptr, png_infopp_NULL); }
+image_t::png_reader_t::~png_reader_t() { png_destroy_read_struct(&_png_ptr, &_info_ptr, NULL); }
 
 texture_id_t image_t::png_reader_t::load_png(const uint8_t *data, const size_t size, unsigned int &width, unsigned int &height) {
 	memory_reader_state.buffer = (unsigned char *)data;
