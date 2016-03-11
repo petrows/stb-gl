@@ -66,7 +66,12 @@ bool Application::init() {
 
 	//_test_surface_3 = surface_t::create("b2.png");
 
-	// _bg_texture = image_t::create("bg.png");
+	_bg_texture = image_t::create("t.png");
+	_ui_surface->blit(_bg_texture, 0, 0);
+
+	surface_ptr_t bg_surf = surface_t::create(10, 10);
+	bg_surf->clear(0x000000B2);
+	_ui_surface->blit(bg_surf, 0, 0, _ui_surface->width(), _ui_surface->height());
 
 	/*
 	FT_Library ft;
@@ -96,12 +101,20 @@ bool Application::init() {
 	glBlendFuncSeparate(GL_ZERO, GL_ONE, GL_ONE, GL_ZERO);
 	_ui_surface->blit(font_tex, 0, 0);*/
 
-	_font = font_t::create("LiberationMono-Regular.ttf", 18);
-	_font->set_color(color_t(0x000000FF));
+	_font = font_t::create("liberation-sans.ttf", 18);
+	_font->set_color(color_t(0xFFFFFFFF));
 	_ui_surface->set_current();
 	_font->draw(_ui_surface, std::string("Using some simple code-sorcery, we can also add text shadows, which makes small text several times more readable on pretty much any background."), 50, 10);
 	_font->draw(_ui_surface, std::string("Докучный шум столицы и двора"), 50, 30);
 	_font->draw(_ui_surface, std::string("И убежать в пустынные дубровы"), 50, 50);
+
+	font_ptr_t fnt2 = font_t::create("liberation-sans-bold.ttf", 24);
+	fnt2->set_color(color_t(0xFFFFFFFF));
+	fnt2->draw(_ui_surface, std::string("Пример текста шрифтом побольше"), 50, 250);
+
+	font_ptr_t fnt3 = font_t::create("liberation-mono.ttf", 24);
+	fnt3->set_color(color_t(0xFFFFFFFF));
+	fnt3->draw(_ui_surface, std::string("Пример текста шрифтом побольше"), 50, 350);
 
 	return true;
 }

@@ -4,8 +4,13 @@
 
 #include "utf8/utf8.h"
 
+#include <algorithm>
+
 using namespace stbgl;
 using namespace std;
+
+unsigned int font_t::_cache_max_size = 10;
+unsigned int font_t::_cache_min_size = 5;
 
 FT_Library font_t::_ft = nullptr;
 shader_program_id_t font_t::_shader_program = 0;
@@ -23,6 +28,17 @@ font_t::font_t(const string &path, unsigned int size) : _size(size) {
 		throw font_error_t("Failed to load font " + path);
 
 	FT_Set_Pixel_Sizes(_ft_face, 0, size);
+}
+
+font_t::~font_t()
+{
+	cout << "Removing font " << _size << endl;
+	while(_cache.size()) {
+		delete _cache.back();
+		_cache.pop_back();
+	}
+
+	FT_Done_Face(_ft_face);
 }
 
 font_ptr_t font_t::create(const string &path, unsigned int size) { return font_ptr_t(new font_t(path, size)); }
@@ -79,20 +95,40 @@ void font_t::draw(surface_ptr_t surface, _glyth_t *glyth, int x, int y) {
 
 font_t::_glyth_t *font_t::render(uint32_t char_utf8) {
 	// Cached?
-	auto cahe_it = _cache.find(char_utf8);
-	if (_cache.end() != cahe_it) {
-		cout << "Using cache for " << char_utf8 << endl;
-		return cahe_it->second;
+	for (_glyth_t *it : _cache)
+	{
+		if (it->_symbol == char_utf8)
+		{
+			// Found it
+			it->_last_used = std::time(nullptr);
+			return it;
+		}
+	}
+
+	// Now remove old glyths from cache
+	if (_cache.size() > _cache_max_size)
+	{
+		// Sort by time used
+		_cache.sort([](_glyth_t *a, _glyth_t *b){ return a->_last_used > b->_last_used; });
+
+		cout << "Font cache reduce from " << _cache.size() << " to " << _cache_min_size << endl;
+
+		while(_cache.size() > _cache_min_size) {
+			delete _cache.back();
+			_cache.pop_back();
+		}
+
+		for (_glyth_t *it : _cache)
+		{
+			cout << it->_last_used << endl;
+		}
 	}
 
 	if (FT_Load_Char(_ft_face, char_utf8, FT_LOAD_RENDER | FT_LOAD_FORCE_AUTOHINT))
 		throw font_error_t("Failed to load Glyph");
 
-	_glyth_t *glyth = new _glyth_t(_ft_face->glyph);
-
-	_cache[char_utf8] = glyth;
-
-	// Now remove old glyths from cache
+	_glyth_t *glyth = new _glyth_t(char_utf8, _ft_face->glyph);
+	_cache.push_back(glyth);
 
 	return glyth;
 }
@@ -136,7 +172,7 @@ bool font_t::prepare_shader() {
 	return true;
 }
 
-font_t::_glyth_t::_glyth_t(FT_GlyphSlot slot) {
+font_t::_glyth_t::_glyth_t(FT_ULong symbol, FT_GlyphSlot slot) {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
 	glEnable(GL_BLEND);
@@ -152,6 +188,8 @@ font_t::_glyth_t::_glyth_t(FT_GlyphSlot slot) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	_last_used = 0;
+	_symbol = symbol;
 	_bitmap_width = slot->bitmap.width;
 	_bitmap_height = slot->bitmap.rows;
 	_bitmap_left = slot->metrics.horiBearingX / 64;

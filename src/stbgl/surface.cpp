@@ -33,7 +33,7 @@ surface_t::surface_t(unsigned int w, unsigned int h, texture_ptr_t texture) : _f
 	}
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		throw framebuffer_error_t(string("glCheckFramebufferStatus = ") + std::to_string(glCheckFramebufferStatus(GL_FRAMEBUFFER)));
+		throw framebuffer_error_t(string("(create) glCheckFramebufferStatus = ") + std::to_string(glCheckFramebufferStatus(GL_FRAMEBUFFER)));
 	}
 }
 
@@ -53,7 +53,7 @@ surface_t &surface_t::fill_rect(const color_t &color, int x, int y, unsigned int
 	render.draw_rectangle(x, y, w, h);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		throw framebuffer_error_t(string("glCheckFramebufferStatus = ") + std::to_string(glCheckFramebufferStatus(GL_FRAMEBUFFER)));
+		throw framebuffer_error_t(string("(draw) glCheckFramebufferStatus = ") + std::to_string(glCheckFramebufferStatus(GL_FRAMEBUFFER)));
 	}
 
 	return *this;
