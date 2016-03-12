@@ -41,13 +41,15 @@ texture_ptr_t image_t::create(const uint8_t *data, size_t size) {
 		texture_id_t tex = reader.load_png(data, size, w, h);
 		return texture_t::create(w, h, tex);
 	}
-#endif
-
+#endif // STBGL_ENABLE_PNG
+#if defined(STBGL_ENABLE_JPG)
 	if (detect_image_jpg(data, size)) {
+		jpg_reader_t reader;
 		// JPEG image
-		// return load_jpg(data.data(), in_size, w, h);
+		texture_id_t tex = reader.load_jpg(data, size, w, h);
+		return texture_t::create(w, h, tex);
 	}
-
+#endif // STBGL_ENABLE_JPG
 	// We here due to the unsopported format or error
 	throw image_error_t(string("Unsopported image format for texture"));
 
@@ -181,6 +183,99 @@ texture_id_t image_t::png_reader_t::load_png(const uint8_t *data, const size_t s
 
 	// read the png into image_data through row_pointers
 	png_read_image(_png_ptr, &(row_pointers[0]));
+
+	// Now generate the OpenGL texture object
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid *)&(image_data[0]));
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	return texture;
+}
+
+void image_t::jpg_reader_t::reader_error_exit(j_common_ptr cinfo)
+{
+	_jpg_error_mgr *myerr = (_jpg_error_mgr *)cinfo->err;
+	(*cinfo->err->output_message)(cinfo);
+	longjmp(myerr->_setjmp_buffer, 1);
+}
+
+image_t::jpg_reader_t::jpg_reader_t()
+{
+	jpeg_create_decompress(&_cinfo);
+	_cinfo.err = jpeg_std_error(&_jerr._pub);
+	_jerr._pub.error_exit = image_t::jpg_reader_t::reader_error_exit;
+	setjmp(_jerr._setjmp_buffer);
+}
+
+image_t::jpg_reader_t::~jpg_reader_t()
+{
+	jpeg_destroy_decompress(&_cinfo);
+}
+
+texture_id_t image_t::jpg_reader_t::load_jpg(const uint8_t *data, const size_t size, unsigned int &width, unsigned int &height)
+{
+	jpeg_mem_src(&_cinfo, const_cast<unsigned char*>(data), size);
+
+	if (JPEG_HEADER_OK != jpeg_read_header(&_cinfo, true))
+	{
+		throw image_error_t("Cant load image header");
+	}
+	width = _cinfo.image_width;
+	height = _cinfo.image_height;
+
+	int rowbytes = width * 4;
+
+	// Allocate render buffer
+	vector<uint8_t> image_data;
+	image_data.resize(height * rowbytes, 0x00);
+
+	JSAMPARRAY buffer; /* Output row buffer */
+	int row_stride;	/* physical row width in output buffer */
+
+	_cinfo.out_color_space = JCS_RGB;
+	_cinfo.quantize_colors = false;
+	_cinfo.output_components = 3;
+	_cinfo.out_color_components = 3;
+
+	_cinfo.output_height = height;
+	_cinfo.output_width = width;
+
+	jpeg_start_decompress(&_cinfo);
+
+	row_stride = _cinfo.output_width * _cinfo.output_components;
+
+	buffer = (*_cinfo.mem->alloc_sarray)((j_common_ptr)&_cinfo, JPOOL_IMAGE, row_stride, 1);
+
+	// row_pointers is for pointing to image_data for reading the png with libpng
+	vector<uint8_t*> row_pointers;
+	row_pointers.resize(height, 0x00);
+
+	// set the individual row_pointers to point at the correct offsets of image_data
+	for (uint32_t i = 0; i < height; ++i)
+		row_pointers[height - i - 1] = &(image_data[i * rowbytes]);
+
+	for (uint32_t y = 0; y < _cinfo.output_height; y++)
+	{
+		jpeg_read_scanlines(&_cinfo, buffer, 1);
+
+		uint8_t *dst = (uint8_t *)row_pointers[y];
+		uint8_t *buf = (uint8_t *)buffer[0];
+
+		for (uint32_t x = 0; x < _cinfo.output_width; x++)
+		{
+			dst[0] = *buf++;
+			dst[1] = *buf++;
+			dst[2] = *buf++;
+			dst[3] = 0xFF;
+
+			dst += 4;
+		}
+	}
+
+	jpeg_finish_decompress(&_cinfo);
 
 	// Now generate the OpenGL texture object
 	GLuint texture;

@@ -10,7 +10,10 @@
 #if defined(STBGL_ENABLE_PNG)
 #include <png.h>
 #endif
-
+#if defined(STBGL_ENABLE_JPG)
+#include <jpeglib.h>
+#include <setjmp.h>
+#endif
 namespace stbgl {
 
 class image_t {
@@ -44,8 +47,27 @@ private:
 		~png_reader_t();
 		texture_id_t load_png(const std::uint8_t *data, const std::size_t size, unsigned int &width, unsigned int &height);
 	};
-#endif
-};
+#endif // STBGL_ENABLE_PNG
+
+#if defined(STBGL_ENABLE_JPG)
+	class jpg_reader_t {
+	private:
+		struct _jpg_error_mgr
+		{
+			struct jpeg_error_mgr _pub;
+			jmp_buf _setjmp_buffer;
+		};
+		struct jpeg_decompress_struct _cinfo;
+		struct _jpg_error_mgr _jerr;
+		static void reader_error_exit(j_common_ptr cinfo);
+	public:
+		jpg_reader_t();
+		~jpg_reader_t();
+		texture_id_t load_jpg(const std::uint8_t *data, const std::size_t size, unsigned int &width, unsigned int &height);
+	};
+	};
+#endif // STBGL_ENABLE_JPG
+
 }
 
 #endif // STBGL_IMAGE_T_H
