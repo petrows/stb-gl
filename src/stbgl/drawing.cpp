@@ -47,6 +47,34 @@ void drawing_t::draw_rectangle(int x, int y, unsigned int w, unsigned int h) {
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
+void drawing_t::draw_line(int x1, int y1, int x2, int y2)
+{
+	glEnable(GL_BLEND);
+	glUseProgram(_shader_program);
+	glViewport(0, 0, _w, _h);
+
+	// Draw points
+	float lineVertices[4] = {
+		util_t::coord_x(_w, x1), util_t::coord_y(_h, y1),
+		util_t::coord_x(_w, x2), util_t::coord_y(_h, y2)
+	};
+
+	const float lineColors[] = {
+		_color.r(), _color.g(), _color.b(), _color.a(),
+		_color.r(), _color.g(), _color.b(), _color.a()
+	};
+
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(_shader_attr_pos, 2, GL_FLOAT, GL_FALSE, 0, lineVertices);
+	glEnableVertexAttribArray(_shader_attr_pos);
+
+	glVertexAttribPointer(_shader_attr_color, 4, GL_FLOAT, GL_FALSE, 0, lineColors);
+	glEnableVertexAttribArray(_shader_attr_color);
+
+	glDrawArrays(GL_LINES, 0, 2);
+}
+
 bool drawing_t::prepare_shader() {
 	_shader_program = glCreateProgram();
 

@@ -91,6 +91,11 @@ bool Application::init() {
 	fnt3->set_color(color_t(0xFFFFFFFF));
 	fnt3->draw(_ui_surface, std::string("Пример текста шрифтом побольше"), 50, 350);
 
+	_ui_surface->set_current();
+	drawing_t d2(_ui_surface->width(), _ui_surface->height());
+	d2.set_color(0x00FFFFFF);
+	d2.draw_line(100,100, 300, 500);
+
 	return true;
 }
 

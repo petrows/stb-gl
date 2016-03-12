@@ -13,6 +13,7 @@ public:
 	void clear(const color_t &color);
 	void set_color(const color_t &color) { _color = color; }
 	void draw_rectangle(int x, int y, unsigned int w, unsigned int h);
+	void draw_line(int x1, int y1, int x2, int y2);
 
 private:
 	bool prepare_shader();
