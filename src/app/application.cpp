@@ -70,7 +70,7 @@ bool Application::init() {
 	//_ui_surface->blit(_bg_texture, 0, 0);
 
 	texture_ptr_t test_jpg = image_t::create("sample.jpg");
-	_ui_surface->blit(test_jpg, 128, 128, 0, 0, test_jpg->width()/2, test_jpg->height()/2, test_jpg->width()/2, test_jpg->height()/2);
+	_ui_surface->blit(test_jpg, 128, 128, 0, 0, 0, 0, test_jpg->width()/2, test_jpg->height()/2);
 
 	surface_ptr_t bg_surf = surface_t::create(10, 10);
 	bg_surf->clear(0x000000B2);

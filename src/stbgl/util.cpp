@@ -42,7 +42,7 @@ void util_t::coord_texture(unsigned int size_w, unsigned int size_h, int x, int 
 
 	// a
 	vect[0] = tex_pos_x + tex_size_x;
-	vect[1] = tex_pos_y + tex_size_y;
+	vect[1] = (tex_pos_y + tex_size_y);
 
 	// b
 	vect[2] = tex_pos_x + tex_size_x;
@@ -54,12 +54,12 @@ void util_t::coord_texture(unsigned int size_w, unsigned int size_h, int x, int 
 
 	// d
 	vect[6] = tex_pos_x;
-	vect[7] = tex_pos_y + tex_size_y;
+	vect[7] = (tex_pos_y + tex_size_y);
 
 	vector<float> out(8);
 	out.assign(vect, vect + 8);
 
-	cout << "aaa";
+	//cout << "aaa";
 }
 
 void util_t::set_clip_rect(unsigned int screen_w, unsigned int screen_h, int x, int y, unsigned int w, unsigned int h) {
