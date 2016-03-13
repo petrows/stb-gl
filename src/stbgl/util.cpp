@@ -28,7 +28,7 @@ void util_t::coord_rect(unsigned int screen_w, unsigned int screen_h, int x, int
 
 void util_t::coord_texture(unsigned int size_w, unsigned int size_h, int x, int y, unsigned int w, unsigned int h, float vect[])
 {
-	/*
+	/* texture mapping:
 	 * c0,0 - b1,0
 	 * d0,1 - a1,1
 	 */
@@ -37,29 +37,36 @@ void util_t::coord_texture(unsigned int size_w, unsigned int size_h, int x, int 
 
 	float tex_pos_x = (float)x / sz_x;
 	float tex_pos_y = (float)y / sz_y;
+
+	// Size of texture.
 	float tex_size_x = (float)w / sz_x;
 	float tex_size_y = (float)h / sz_y;
 
+	// Check the max size, should me inside the borders
+	tex_size_x = std::min(tex_size_x, (1.0f - tex_pos_x));
+	tex_size_y = std::min(tex_size_y, (1.0f - tex_pos_y));
+
+	float pos_x1 = tex_pos_x;
+	float pos_x2 = tex_pos_x + tex_size_x;
+
+	float pos_y1 =  1.0f - (tex_pos_y + tex_size_y);
+	float pos_y2 =  1.0f - (tex_pos_y);
+
 	// a
-	vect[0] = tex_pos_x + tex_size_x;
-	vect[1] = (tex_pos_y + tex_size_y);
+	vect[0] = pos_x2;
+	vect[1] = pos_y2;
 
 	// b
-	vect[2] = tex_pos_x + tex_size_x;
-	vect[3] = tex_pos_y;
+	vect[2] = pos_x2;
+	vect[3] = pos_y1;
 
 	// c
-	vect[4] = tex_pos_x;
-	vect[5] = tex_pos_y;
+	vect[4] = pos_x1;
+	vect[5] = pos_y1;
 
 	// d
-	vect[6] = tex_pos_x;
-	vect[7] = (tex_pos_y + tex_size_y);
-
-	vector<float> out(8);
-	out.assign(vect, vect + 8);
-
-	//cout << "aaa";
+	vect[6] = pos_x1;
+	vect[7] = pos_y2;
 }
 
 void util_t::set_clip_rect(unsigned int screen_w, unsigned int screen_h, int x, int y, unsigned int w, unsigned int h) {

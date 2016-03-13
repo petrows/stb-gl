@@ -26,7 +26,6 @@ bool Application::init() {
 	_ui_surface = surface_t::create(UI_W, UI_H);
 	_ui_surface->clear(0xFFFFFFFF);
 
-	/*
 	for (uint32_t y = 0; y < UI_H; y += 64) {
 		_ui_surface->fill_rect(color_t(0x66666699), 0, y, UI_W, 1);
 	}
@@ -34,6 +33,7 @@ bool Application::init() {
 		_ui_surface->fill_rect(color_t(0x66666699), x, 0, 1, UI_H);
 	}
 
+	/*
 	surface_ptr_t test_surface;
 
 	test_surface = surface_t::create(0xFF, 0xFF);
@@ -70,7 +70,7 @@ bool Application::init() {
 	//_ui_surface->blit(_bg_texture, 0, 0);
 
 	texture_ptr_t test_jpg = image_t::create("sample.jpg");
-	_ui_surface->blit(test_jpg, 128, 128, 0, 0, 0, 0, test_jpg->width()/2, test_jpg->height()/2);
+	_ui_surface->blit(test_jpg, 128, 128, 8*64, 6*64, test_jpg->width()/2, test_jpg->height()/2, test_jpg->width(), test_jpg->height());
 
 	surface_ptr_t bg_surf = surface_t::create(10, 10);
 	bg_surf->clear(0x000000B2);
