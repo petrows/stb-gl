@@ -51,9 +51,6 @@ void blitting_t::draw(const texture_ptr_t &texture, int x, int y, unsigned int w
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	if (0 == _src_w) _src_w = texture->width();
-	if (0 == _src_h) _src_h = texture->height();
-
 	verticles_t texture_coords = util_t::coord_texture(texture->width(), texture->height(), _src_x, _src_y, _src_w, _src_h);
 
 	glVertexAttribPointer(_shader_tex_pos, 2, GL_FLOAT, GL_FALSE, 0, &texture_coords.front());

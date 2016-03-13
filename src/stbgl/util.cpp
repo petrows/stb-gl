@@ -39,6 +39,9 @@ verticles_t util_t::coord_texture(unsigned int size_w, unsigned int size_h, int 
 	std::vector<float> vect;
 	vect.resize(8);
 
+	if (0 == w) w = size_w - x;
+	if (0 == h) h = size_h - y;
+
 	float sz_x = size_w;
 	float sz_y = size_h;
 
