@@ -54,19 +54,17 @@ void blitting_t::draw(const texture_ptr_t &texture, int x, int y, unsigned int w
 	if (0 == _src_w) _src_w = texture->width();
 	if (0 == _src_h) _src_h = texture->height();
 
-	float texture_coords[8];
-	util_t::coord_texture(texture->width(), texture->height(), _src_x, _src_y, _src_w, _src_h, texture_coords);
+	verticles_t texture_coords = util_t::coord_texture(texture->width(), texture->height(), _src_x, _src_y, _src_w, _src_h);
 
-	glVertexAttribPointer(_shader_tex_pos, 2, GL_FLOAT, GL_FALSE, 0, texture_coords);
+	glVertexAttribPointer(_shader_tex_pos, 2, GL_FLOAT, GL_FALSE, 0, &texture_coords.front());
 	glEnableVertexAttribArray(_shader_tex_pos);
 
 	// Draw surfaces
-	float triangleVertices[12];
-	util_t::coord_rect(_w, _h, x, y, w, h, triangleVertices);
+	verticles_t triangleVertices = util_t::coord_rect(_w, _h, x, y, w, h);
 
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(_shader_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, triangleVertices);
+	glVertexAttribPointer(_shader_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, &triangleVertices.front());
 	glEnableVertexAttribArray(_shader_attr_pos);
 
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);

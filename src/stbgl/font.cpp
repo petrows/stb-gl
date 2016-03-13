@@ -32,7 +32,6 @@ font_t::font_t(const string &path, unsigned int size) : _size(size) {
 
 font_t::~font_t()
 {
-	cout << "Removing font " << _size << endl;
 	while(_cache.size()) {
 		delete _cache.back();
 		_cache.pop_back();
@@ -53,7 +52,6 @@ void font_t::draw(surface_ptr_t surface, const string &text_utf8, int x, int y) 
 		slot_id = utf8::unchecked::next(it);
 		_glyth_t *glyth = render(slot_id);
 		draw(surface, glyth, x, y);
-		cout << "Slot: " << slot_id << endl;
 		x += glyth->_advance;
 	}
 }
@@ -75,12 +73,11 @@ void font_t::draw(surface_ptr_t surface, _glyth_t *glyth, int x, int y) {
 	glEnableVertexAttribArray(_shader_tex_pos);
 
 	// Draw surfaces
-	float triangleVertices[12];
-	util_t::coord_rect(surface->width(), surface->height(), x + glyth->_bitmap_left, y + _size - glyth->_bitmap_top, glyth->_bitmap_width, glyth->_bitmap_height, triangleVertices);
+	verticles_t triangleVertices = util_t::coord_rect(surface->width(), surface->height(), x + glyth->_bitmap_left, y + _size - glyth->_bitmap_top, glyth->_bitmap_width, glyth->_bitmap_height);
 
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(_shader_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, triangleVertices);
+	glVertexAttribPointer(_shader_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, &triangleVertices.front());
 	glEnableVertexAttribArray(_shader_attr_pos);
 
 	const float triangleColors[] = {
@@ -91,6 +88,19 @@ void font_t::draw(surface_ptr_t surface, _glyth_t *glyth, int x, int y) {
 	glEnableVertexAttribArray(_shader_attr_color);
 
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
+size_t font_t::get_string_size(const string &text_utf8)
+{
+	size_t str_size = 0;
+	string::const_iterator it = text_utf8.begin();
+	FT_ULong slot_id;
+	while (it != text_utf8.end()) {
+		slot_id = utf8::unchecked::next(it);
+		_glyth_t *glyth = render(slot_id);
+		str_size += glyth->_bitmap_width;
+	}
+	return str_size;
 }
 
 font_t::_glyth_t *font_t::render(uint32_t char_utf8) {
@@ -111,16 +121,9 @@ font_t::_glyth_t *font_t::render(uint32_t char_utf8) {
 		// Sort by time used
 		_cache.sort([](_glyth_t *a, _glyth_t *b){ return a->_last_used > b->_last_used; });
 
-		cout << "Font cache reduce from " << _cache.size() << " to " << _cache_min_size << endl;
-
 		while(_cache.size() > _cache_min_size) {
 			delete _cache.back();
 			_cache.pop_back();
-		}
-
-		for (_glyth_t *it : _cache)
-		{
-			cout << it->_last_used << endl;
 		}
 	}
 

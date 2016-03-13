@@ -29,8 +29,7 @@ void drawing_t::draw_rectangle(int x, int y, unsigned int w, unsigned int h) {
 	glViewport(0, 0, _w, _h);
 
 	// Draw points
-	float triangleVertices[12];
-	util_t::coord_rect(_w, _h, x, y, w, h, triangleVertices);
+	verticles_t triangleVertices = util_t::coord_rect(_w, _h, x, y, w, h);
 
 	const float triangleColors[] = {
 		_color.r(), _color.g(), _color.b(), _color.a(), _color.r(), _color.g(), _color.b(), _color.a(), _color.r(), _color.g(), _color.b(), _color.a(), _color.r(), _color.g(), _color.b(), _color.a(),
@@ -38,7 +37,7 @@ void drawing_t::draw_rectangle(int x, int y, unsigned int w, unsigned int h) {
 
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(_shader_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, triangleVertices);
+	glVertexAttribPointer(_shader_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, &triangleVertices.front());
 	glEnableVertexAttribArray(_shader_attr_pos);
 
 	glVertexAttribPointer(_shader_attr_color, 4, GL_FLOAT, GL_FALSE, 0, triangleColors);

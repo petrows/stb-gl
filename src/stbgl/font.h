@@ -31,6 +31,8 @@ public:
 
 	void set_color(const color_t &color) { _color = color; }
 
+	size_t get_string_size(const std::string &text_utf8);
+
 private:
 	_glyth_t *render(std::uint32_t char_utf8);
 

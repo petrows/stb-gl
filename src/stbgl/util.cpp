@@ -8,7 +8,10 @@ float util_t::coord_x(unsigned int w, int x) { return ((float)x - (w / 2)) / (fl
 
 float util_t::coord_y(unsigned int h, int y) { return ((h / 2) - (float)y) / (float)(h / 2); }
 
-void util_t::coord_rect(unsigned int screen_w, unsigned int screen_h, int x, int y, unsigned int w, unsigned int h, float *vect) {
+verticles_t util_t::coord_rect(unsigned int screen_w, unsigned int screen_h, int x, int y, unsigned int w, unsigned int h) {
+	std::vector<float> vect;
+	vect.resize(12);
+
 	vect[0] = coord_x(screen_w, x + w);
 	vect[1] = coord_y(screen_h, y);
 	vect[2] = 0.0;
@@ -24,14 +27,18 @@ void util_t::coord_rect(unsigned int screen_w, unsigned int screen_h, int x, int
 	vect[9] = coord_x(screen_w, x);
 	vect[10] = coord_y(screen_h, y);
 	vect[11] = 0.0;
+
+	return vect;
 }
 
-void util_t::coord_texture(unsigned int size_w, unsigned int size_h, int x, int y, unsigned int w, unsigned int h, float vect[])
-{
+verticles_t util_t::coord_texture(unsigned int size_w, unsigned int size_h, int x, int y, unsigned int w, unsigned int h) {
 	/* texture mapping:
 	 * c0,0 - b1,0
 	 * d0,1 - a1,1
 	 */
+	std::vector<float> vect;
+	vect.resize(8);
+
 	float sz_x = size_w;
 	float sz_y = size_h;
 
@@ -67,6 +74,8 @@ void util_t::coord_texture(unsigned int size_w, unsigned int size_h, int x, int 
 	// d
 	vect[6] = pos_x1;
 	vect[7] = pos_y2;
+
+	return vect;
 }
 
 void util_t::set_clip_rect(unsigned int screen_w, unsigned int screen_h, int x, int y, unsigned int w, unsigned int h) {

@@ -18,6 +18,7 @@
 namespace stbgl {
 
 typedef std::vector<std::uint8_t> buffer_t;
+typedef std::vector<float> verticles_t;
 
 typedef GLuint shader_id_t;
 typedef GLuint shader_program_id_t;
