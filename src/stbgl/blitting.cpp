@@ -15,10 +15,22 @@ shader_attrib_id_t blitting_t::_shader_attr_pos = 0;
 shader_attrib_id_t blitting_t::_shader_tex_uniform = 0;
 shader_attrib_id_t blitting_t::_shader_tex_pos = 0;
 
-blitting_t::blitting_t(uint32_t width, uint32_t height) : _w(width), _h(height) {
+blitting_t::blitting_t(uint32_t width, uint32_t height)
+	: _w(width), _h(height)
+	, _src_x(0), _src_y(0)
+	, _src_w(0), _src_h(0)
+{
 	if (0 == _shader_program) {
 		prepare_shader();
 	}
+}
+
+void blitting_t::set_src(int src_x, int src_y, unsigned int src_w, unsigned int src_h)
+{
+	_src_x = src_x;
+	_src_y = src_y;
+	_src_w = src_w;
+	_src_h = src_h;
 }
 
 void blitting_t::draw(const texture_ptr_t &texture, int x, int y, unsigned int w, unsigned int h) {
@@ -39,9 +51,11 @@ void blitting_t::draw(const texture_ptr_t &texture, int x, int y, unsigned int w
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	static const float texture_coords[] = {
-		1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
-	};
+	if (0 == _src_w) _src_w = texture->width();
+	if (0 == _src_h) _src_h = texture->height();
+
+	float texture_coords[8];
+	util_t::coord_texture(texture->width(), texture->height(), _src_x, _src_y, _src_w, _src_h, texture_coords);
 
 	glVertexAttribPointer(_shader_tex_pos, 2, GL_FLOAT, GL_FALSE, 0, texture_coords);
 	glEnableVertexAttribArray(_shader_tex_pos);

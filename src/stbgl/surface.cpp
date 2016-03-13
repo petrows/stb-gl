@@ -59,17 +59,20 @@ surface_t &surface_t::fill_rect(const color_t &color, int x, int y, unsigned int
 	return *this;
 }
 
-surface_t &surface_t::blit(const surface_ptr_t &surface, int x, int y, unsigned int w, unsigned int h) { return blit(surface->texture(), x, y, w, h); }
+surface_t &surface_t::blit(const surface_ptr_t &surface, int dst_x, int dst_y, unsigned int dst_w, unsigned int dst_h, int src_x, int src_y, unsigned int src_w, unsigned int src_h) {
+	return blit(surface->texture(), dst_x, dst_y, dst_w, dst_h, src_x, src_y, src_w, src_h);
+}
 
-surface_t &surface_t::blit(const texture_ptr_t &texture, int x, int y, unsigned int w, unsigned int h) {
-	if (!w)
-		w = texture->width();
-	if (!h)
-		h = texture->height();
+surface_t &surface_t::blit(const texture_ptr_t &texture, int dst_x, int dst_y, unsigned int dst_w, unsigned int dst_h, int src_x, int src_y, unsigned int src_w, unsigned int src_h) {
+	if (!dst_w)
+		dst_w = texture->width();
+	if (!dst_h)
+		dst_h = texture->height();
 
 	set_current();
 	blitting_t tex(_width, _height);
-	tex.draw(texture, x, y, w, h);
+	tex.set_src(src_x, src_y, src_w, src_h);
+	tex.draw(texture, dst_x, dst_y, dst_w, dst_h);
 
 	return *this;
 }

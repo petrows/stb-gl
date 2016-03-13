@@ -26,8 +26,8 @@ public:
 
 	void clear(const color_t &color) { fill_rect(color, 0, 0, _width, _height); }						 //! Fill all surface with color
 	surface_t &fill_rect(const color_t &color, int x, int y, unsigned int w, unsigned int h);			 //! Fill desired rectangle surface with color
-	surface_t &blit(const surface_ptr_t &surface, int x, int y, unsigned int w = 0, unsigned int h = 0); //! Blit other surface to our
-	surface_t &blit(const texture_ptr_t &texture, int x, int y, unsigned int w = 0, unsigned int h = 0); //! Blit other surface to our
+	surface_t &blit(const surface_ptr_t &surface, int dst_x, int dst_y, unsigned int dst_w = 0, unsigned int dst_h = 0, int src_x = 0, int src_y = 0, unsigned int src_w = 0, unsigned int src_h = 0); //! Blit other surface to our
+	surface_t &blit(const texture_ptr_t &texture, int dst_x, int dst_y, unsigned int dst_w = 0, unsigned int dst_h = 0, int src_x = 0, int src_y = 0, unsigned int src_w = 0, unsigned int src_h = 0); //! Blit other surface to our
 
 	void memory_lock(buffer_t &data);
 	void memory_unlock(buffer_t &data);

@@ -26,6 +26,42 @@ void util_t::coord_rect(unsigned int screen_w, unsigned int screen_h, int x, int
 	vect[11] = 0.0;
 }
 
+void util_t::coord_texture(unsigned int size_w, unsigned int size_h, int x, int y, unsigned int w, unsigned int h, float vect[])
+{
+	/*
+	 * c0,0 - b1,0
+	 * d0,1 - a1,1
+	 */
+	float sz_x = size_w;
+	float sz_y = size_h;
+
+	float tex_pos_x = (float)x / sz_x;
+	float tex_pos_y = (float)y / sz_y;
+	float tex_size_x = (float)w / sz_x;
+	float tex_size_y = (float)h / sz_y;
+
+	// a
+	vect[0] = tex_pos_x + tex_size_x;
+	vect[1] = tex_pos_y + tex_size_y;
+
+	// b
+	vect[2] = tex_pos_x + tex_size_x;
+	vect[3] = tex_pos_y;
+
+	// c
+	vect[4] = tex_pos_x;
+	vect[5] = tex_pos_y;
+
+	// d
+	vect[6] = tex_pos_x;
+	vect[7] = tex_pos_y + tex_size_y;
+
+	vector<float> out(8);
+	out.assign(vect, vect + 8);
+
+	cout << "aaa";
+}
+
 void util_t::set_clip_rect(unsigned int screen_w, unsigned int screen_h, int x, int y, unsigned int w, unsigned int h) {
 	(void)screen_w;
 	glEnable(GL_SCISSOR_TEST);
