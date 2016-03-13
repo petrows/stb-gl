@@ -98,9 +98,14 @@ size_t font_t::get_string_size(const string &text_utf8)
 	while (it != text_utf8.end()) {
 		slot_id = utf8::unchecked::next(it);
 		_glyth_t *glyth = render(slot_id);
-		str_size += glyth->_bitmap_width;
+		str_size += glyth->_advance;
 	}
 	return str_size;
+}
+
+size_t font_t::get_max_height() const
+{
+	return _ft_face->bbox.xMax / 64;
 }
 
 font_t::_glyth_t *font_t::render(uint32_t char_utf8) {

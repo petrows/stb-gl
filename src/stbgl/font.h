@@ -33,6 +33,8 @@ public:
 
 	size_t get_string_size(const std::string &text_utf8);
 
+	size_t get_max_height() const;
+
 private:
 	_glyth_t *render(std::uint32_t char_utf8);
 

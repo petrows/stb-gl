@@ -92,6 +92,8 @@ bool Application::init() {
 	font_ptr_t fnt3 = font_t::create("liberation-mono.ttf", 24);
 	fnt3->set_color(color_t(0xFFFFFFFF));
 	fnt3->draw(_ui_surface, std::string("Пример текста шрифтом побольше"), 50, 350);
+	size_t fnt_size = fnt3->get_max_height();
+
 
 	_ui_surface->set_current();
 	drawing_t d2(_ui_surface->width(), _ui_surface->height());
